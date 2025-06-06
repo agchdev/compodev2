@@ -1,0 +1,73 @@
+.code-project-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.project-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.editors-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 1200px) {
+  .editors-container {
+    flex-direction: row;
+  }
+  
+  .editors {
+    flex: 1;
+  }
+  
+  .preview-container {
+    flex: 1;
+  }
+}
+
+.editors {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.editor {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.editor-header {
+  background-color: #2c3e50;
+  color: white;
+  padding: 8px 15px;
+  font-weight: bold;
+}
+
+.code-editor {
+  overflow: hidden;
+}
+
+.preview-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 100%;
+}
+
+.preview {
+  width: 100%;
+  height: 600px;
+  border: none;
+  background-color: white;
+}
+
+/* Estilos para el tema oscuro de CodeMirror */
+.cm-editor {
+  height: 300px !important;
+}
