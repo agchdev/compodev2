@@ -7,7 +7,6 @@ import Home from './pages/Home';
 import CreateProyect from './pages/CreateProyect';
 import Perfil from './pages/Perfil';
 import CodeProject from './pages/CodeProject';
-import Suscriptions from './pages/Suscriptions';
 import Search from './pages/Search';
 import ProfileEdit from './pages/ProfileEdit';
 import Foro from './pages/Foro';
@@ -15,6 +14,7 @@ import AdminPanel from './pages/AdminPanel';
 import AdminProjects from './pages/AdminProjects';
 import AdminUsers from './pages/AdminUsers';
 import AdminMessagesUsers from './pages/AdminMessagesUsers';
+import Subscription from './pages/Subscription';
 
 function App() {
   return (
@@ -27,7 +27,7 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/crearProyecto' element={<CreateProyect />} />
             <Route path='/code-project/:id' element={<CodeProject />} />
-            <Route path='/suscripciones' element={<Suscriptions />} />
+            <Route path='/suscripciones' element={<Subscription />} />
             <Route path='/perfil' element={<Perfil />} />
             <Route path='/Search' element={<Search />} />
             <Route path='/editar-perfil' element={<ProfileEdit />} />

@@ -68,7 +68,7 @@ class CreateUser {
             $user->password,
             $user->urlFoto,
             $user->descripcion,
-            $user->fechaRegistro
+            $user->fecha_registro
         );
         if ($stmt->execute()) {
             echo json_encode(["message" => "Usuario creado con éxito"]);

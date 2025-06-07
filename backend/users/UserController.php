@@ -14,6 +14,7 @@ require_once __DIR__ . '/use_cases/GetAllUsers.php';
 require_once __DIR__ . '/use_cases/GetUserById.php';
 require_once __DIR__ . '/use_cases/UpdateUser.php';
 require_once __DIR__ . '/use_cases/DeleteUser.php';
+require_once __DIR__ . '/use_cases/VerifyUser.php';
 
 // Obtener método HTTP
 $method = $_SERVER['REQUEST_METHOD'];
@@ -298,6 +299,33 @@ switch ($action) {
         } else {
             http_response_code(405);
             echo json_encode(['error' => 'Método no permitido']);
+        }
+        break;
+        
+    case 'verify':
+        if ($method === 'POST') {
+            // Obtener datos del cuerpo de la solicitud
+            $data = json_decode(file_get_contents('php://input'), true);
+            
+            // Verificar que se haya proporcionado un ID de usuario
+            if (!isset($data['userId']) || empty($data['userId'])) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'error' => 'Falta el ID del usuario']);
+                exit;
+            }
+            
+            // Convertir a entero para seguridad
+            $userId = intval($data['userId']);
+            
+            // Ejecutar el caso de uso
+            $useCase = new VerifyUser();
+            $result = $useCase->execute($userId);
+            
+            // Devolver la respuesta
+            echo json_encode($result);
+        } else {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'error' => 'Método no permitido']);
         }
         break;
         

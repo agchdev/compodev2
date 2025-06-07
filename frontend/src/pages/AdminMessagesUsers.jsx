@@ -397,11 +397,16 @@ const AdminMessagesUsers = () => {
                             <div className="d-flex align-items-center user-info">
                               {comment.avatar ? (
                                 <img
-                                  src={`${backendUrl}/uploads/${comment.avatar}`}
-                                  alt="Avatar"
+                                  src={`${backendUrl}/${comment.avatar}`}
+                                  alt="Imagen de perfil"
                                   className="me-2 rounded-circle border"
                                   width="40"
                                   height="40"
+                                  onError={(e) => {
+                                    console.log('Error cargando avatar');
+                                    e.target.onerror = null;
+                                    e.target.src = 'https://via.placeholder.com/40';
+                                  }}
                                 />
                               ) : (
                                 <div className="me-2 user-avatar-placeholder rounded-circle" style={{ width: '40px', height: '40px', backgroundColor: '#e9ecef', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -468,11 +473,16 @@ const AdminMessagesUsers = () => {
                             <div className="d-flex align-items-center user-info">
                               {message.avatar ? (
                                 <img
-                                  src={message.avatar}
+                                  src={`${backendUrl}/${message.avatar}`}
                                   alt="Avatar"
                                   className="me-2 rounded-circle border"
                                   width="40"
                                   height="40"
+                                  onError={(e) => {
+                                    console.log('Error cargando avatar');
+                                    e.target.onerror = null;
+                                    e.target.src = 'https://via.placeholder.com/40';
+                                  }}
                                 />
                               ) : (
                                 <div className="me-2 user-avatar-placeholder rounded-circle" style={{ width: '40px', height: '40px', backgroundColor: '#e9ecef', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
