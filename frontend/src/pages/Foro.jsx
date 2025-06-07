@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -169,7 +169,7 @@ const Foro = () => {
         try {
             setLoading(true);
             const response = await axios.get(
-                `${backendUrl}messages_users/MessagesUserController.php?action=all&itemsPerPage=10`,
+                `${backendUrl}/messages_users/MessagesUserController.php?action=all`,
                 { withCredentials: true }
             );
             console.log('Respuesta de mensajes:', response.data);
@@ -188,7 +188,7 @@ const Foro = () => {
         try {
             setLoadingComments(true);
             const response = await axios.get(
-                `${backendUrl}comments_users/CommentsUserController.php?action=byMessage&id_mensaje=${messageId}`,
+                `${backendUrl}/comments_users/CommentsUserController.php?action=byMessage&id_mensaje=${messageId}`,
                 { withCredentials: true }
             );
             console.log('Respuesta de comentarios:', response.data);
@@ -228,7 +228,7 @@ const Foro = () => {
 
         try {
             const response = await axios.post(
-                `${backendUrl}messages_users/MessagesUserController.php?action=create`,
+                `${backendUrl}/messages_users/MessagesUserController.php?action=create`,
                 {
                     texto: newMessage.trim(),
                     id_usuario: user.id,
@@ -409,7 +409,7 @@ const Foro = () => {
                         </div>
 
                         <p style={{margin: '16px 0'}}>
-                            {message.contenido}
+                            {message.texto}
                         </p>
 
                         <div style={{display: 'flex', justifyContent: 'space-between'}}>

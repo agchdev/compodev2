@@ -9,8 +9,9 @@ class DB {
 
         // Manejo de errores en la conexión
         if ($this->conn->connect_error) {
-            die(json_encode(["status" => "error", "message" => "Error de conexión: " . $this->conn->connect_error]));
+            throw new Exception("Error de conexión: " . $this->conn->connect_error);
         }
+        
         // No imprimir mensajes de conexión exitosa automáticamente
     }
 

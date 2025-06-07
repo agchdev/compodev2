@@ -19,10 +19,13 @@ require_once __DIR__ . '/use_cases/DeleteUser.php';
 $method = $_SERVER['REQUEST_METHOD'];
 
 // Configuración de CORS para desarrollo
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header('Access-Control-Allow-Credentials: true');
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+// Solo enviar los headers una vez
+if (!headers_sent()) {
+    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header('Access-Control-Allow-Credentials: true');
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+}
 
 // Manejar solicitudes preflight OPTIONS
 if ($method === 'OPTIONS') {

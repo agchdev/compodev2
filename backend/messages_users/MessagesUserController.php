@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Controlador para gestionar operaciones relacionadas con los mensajes de usuarios
- * 
- * Este controlador utiliza el parámetro 'action' en la URL para determinar qué acción ejecutar.
- * Ejemplo: MessagesUserController.php?action=create
- */
 
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/use_cases/CreateMessagesUser.php';
@@ -18,11 +12,13 @@ require_once __DIR__ . '/use_cases/DeleteMessagesUser.php';
 $method = $_SERVER['REQUEST_METHOD'];
 
 // Permitir cualquier origen durante el desarrollo
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header('Access-Control-Allow-Credentials: true');
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
+if (!headers_sent()) {
+    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header('Access-Control-Allow-Credentials: true');
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+}
 // Manejar solicitudes preflight OPTIONS
 if ($method === 'OPTIONS') {
     http_response_code(200);
@@ -74,33 +70,41 @@ switch ($action) {
         }
         break;
         
-    case 'all':
-        if ($method === 'GET') {
-            // Obtener parámetros de paginación y búsqueda
-            $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-            $search = isset($_GET['search']) ? $_GET['search'] : null;
-            $itemsPerPage = isset($_GET['itemsPerPage']) ? intval($_GET['itemsPerPage']) : 10;
-            
-            // Obtener todos los mensajes
-            $useCase = new GetAllMessagesUser();
-            $result = $useCase->execute($page, $search, $itemsPerPage);
-            
-            // Asegurarse de que no haya salida antes de enviar el JSON
-            if (ob_get_length()) ob_clean();
-            
-            // Si hay error, enviar código de error
-            if (isset($result['error'])) {
-                http_response_code(500);
-                echo json_encode(['error' => $result['error']], JSON_UNESCAPED_UNICODE);
+        case 'all':
+            if ($method === 'GET') {
+                error_log("[MessagesUserController] Acción 'all' iniciada");
+        
+                $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+                $search = isset($_GET['search']) ? $_GET['search'] : null;
+                $itemsPerPage = isset($_GET['itemsPerPage']) ? intval($_GET['itemsPerPage']) : 0;
+        
+                error_log("[MessagesUserController] Parámetros: page=$page, search=" . var_export($search, true) . ", itemsPerPage=$itemsPerPage");
+        
+                try {
+                    $useCase = new GetAllMessagesUser();
+                    $result = $useCase->execute($page, $search, $itemsPerPage);
+        
+                    if (ob_get_length()) ob_clean();
+        
+                    if (isset($result['error'])) {
+                        error_log("[MessagesUserController] Error recibido desde GetAllMessagesUser: " . $result['error']);
+                        http_response_code(500);
+                        echo json_encode(['error' => $result['error']], JSON_UNESCAPED_UNICODE);
+                    } else {
+                        error_log("[MessagesUserController] Mensajes obtenidos correctamente: " . count($result['data']) . " resultados.");
+                        echo json_encode($result, JSON_UNESCAPED_UNICODE);
+                    }
+                } catch (Exception $e) {
+                    error_log("[MessagesUserController] Excepción no controlada: " . $e->getMessage());
+                    http_response_code(500);
+                    echo json_encode(['error' => 'Excepción en servidor: ' . $e->getMessage()], JSON_UNESCAPED_UNICODE);
+                }
             } else {
-                // Enviar los datos como JSON
-                echo json_encode($result, JSON_UNESCAPED_UNICODE);
+                http_response_code(405);
+                echo json_encode(['error' => 'Método no permitido']);
             }
-        } else {
-            http_response_code(405);
-            echo json_encode(['error' => 'Método no permitido']);
-        }
-        break;
+            break;
+        
         
     case 'get':
         if ($method === 'GET') {

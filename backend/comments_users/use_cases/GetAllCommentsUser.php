@@ -23,9 +23,11 @@ class GetAllCommentsUser {
             // Calcular el offset para la paginación
             $offset = ($page - 1) * $itemsPerPage;
             
-            // Preparar la consulta SQL base
-            $sql = "SELECT * FROM comentarios_usuarios";
-            $countSql = "SELECT COUNT(*) as total FROM comentarios_usuarios";
+            // Preparar la consulta SQL base con JOIN a usuarios para obtener información del autor
+            $sql = "SELECT c.*, u.user as username, u.email, u.urlFoto as avatar 
+                   FROM comentarios_usuarios c 
+                   LEFT JOIN usuarios u ON c.id_usuario = u.id";
+            $countSql = "SELECT COUNT(*) as total FROM comentarios_usuarios c";
             
             $params = [];
             $types = "";

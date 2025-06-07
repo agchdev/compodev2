@@ -12,6 +12,9 @@ import Search from './pages/Search';
 import ProfileEdit from './pages/ProfileEdit';
 import Foro from './pages/Foro';
 import AdminPanel from './pages/AdminPanel';
+import AdminProjects from './pages/AdminProjects';
+import AdminUsers from './pages/AdminUsers';
+import AdminMessagesUsers from './pages/AdminMessagesUsers';
 
 function App() {
   return (
@@ -30,6 +33,9 @@ function App() {
             <Route path='/editar-perfil' element={<ProfileEdit />} />
             <Route path='/foro' element={<Foro />} />
             <Route path='/Admin-panel' element={<AdminPanel />} />
+            <Route path='/Admin-projects' element={<AdminProjects />} />
+            <Route path='/Admin-users' element={<AdminUsers />} />
+            <Route path='/Admin-messages' element={<AdminMessagesUsers />} />
           </Route>
         </Routes>
       </BrowserRouter>

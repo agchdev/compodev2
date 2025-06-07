@@ -1,11 +1,15 @@
 <?php
 
+// Obtener método HTTP
+$method = $_SERVER['REQUEST_METHOD'];
+
 /**
  * Controlador para gestionar operaciones relacionadas con los comentarios de usuarios
  * 
  * Este controlador utiliza el parámetro 'action' en la URL para determinar qué acción ejecutar.
  * Ejemplo: CommentsUserController.php?action=create
  */
+
 
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/use_cases/CreateCommentsUser.php';
@@ -14,16 +18,12 @@ require_once __DIR__ . '/use_cases/GetCommentsUserById.php';
 require_once __DIR__ . '/use_cases/UpdateCommentsUser.php';
 require_once __DIR__ . '/use_cases/DeleteCommentsUser.php';
 require_once __DIR__ . '/use_cases/GetCommentsByMessage.php';
-
-// Obtener método HTTP
-$method = $_SERVER['REQUEST_METHOD'];
-
-// Permitir cualquier origen durante el desarrollo
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header('Access-Control-Allow-Credentials: true');
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-
+if (!headers_sent()) {
+    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header('Access-Control-Allow-Credentials: true');
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+}
 // Manejar solicitudes preflight OPTIONS
 if ($method === 'OPTIONS') {
     http_response_code(200);
@@ -41,7 +41,6 @@ if (!isset($_GET['action'])) {
 }
 
 $action = $_GET['action'];
-
 // Mapeo de acciones a métodos
 switch ($action) {
     case 'create':
