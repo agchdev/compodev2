@@ -7,7 +7,8 @@ const Header = () => {
   const [user, setUser] = useState(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [profileMenuOpen, setProfileMenuOpen] = useState(false)
-  const [adminMenuOpen, setAdminMenuOpen] = useState(false)
+  // No longer need adminMenuOpen state as we'll use CSS hover
+  // const [adminMenuOpen, setAdminMenuOpen] = useState(false)
   const backendUrl = import.meta.env.VITE_BACKEND_URL
   const navigate = useNavigate()
 
@@ -19,6 +20,7 @@ const Header = () => {
           { withCredentials: true }
         );
         const userData = response.data;
+        console.log(userData)
         setUser(userData);
       } catch (error) {
         console.log("Error al obtener la sesión:", error)
@@ -45,35 +47,36 @@ const Header = () => {
     setMenuOpen(!menuOpen);
     // Cierra los otros menús cuando se abre/cierra el menú principal
     setProfileMenuOpen(false);
-    setAdminMenuOpen(false);
+    // No longer need to set adminMenuOpen
   }
 
   const toggleProfileMenu = (e) => {
     e.stopPropagation();
     setProfileMenuOpen(!profileMenuOpen);
-    setAdminMenuOpen(false);
+    // No longer need to set adminMenuOpen
   }
 
-  const toggleAdminMenu = (e) => {
-    e.stopPropagation();
-    setAdminMenuOpen(!adminMenuOpen);
-    setProfileMenuOpen(false);
-  }
+  // No longer needed as we'll use CSS hover
+  // const toggleAdminMenu = (e) => {
+  //   e.stopPropagation();
+  //   setAdminMenuOpen(!adminMenuOpen);
+  //   setProfileMenuOpen(false);
+  // }
 
   // Cerrar menús al hacer clic fuera
   useEffect(() => {
     const closeMenus = () => {
       setProfileMenuOpen(false);
-      setAdminMenuOpen(false);
+      // No longer need to set adminMenuOpen
     };
-    
+
     document.addEventListener('click', closeMenus);
-    
+
     return () => {
       document.removeEventListener('click', closeMenus);
     };
   }, []);
-  
+
   return (
     <header className="main-header">
       <div className="header-container">
@@ -106,9 +109,9 @@ const Header = () => {
           {user ? (
             <div className="user-profile" onClick={toggleProfileMenu}>
               <div className="profile-pic">
-                {user.imagen ? (
-                  <img 
-                    src={`${backendUrl}/users/uploads/${user.imagen}`} 
+                {user.urlFoto ? (
+                  <img
+                    src={`${backendUrl}/${user.urlFoto}`}
                     alt="Perfil"
                   />
                 ) : (
@@ -117,28 +120,35 @@ const Header = () => {
               </div>
               {profileMenuOpen && (
                 <div className="profile-dropdown" onClick={(e) => e.stopPropagation()}>
-                  <div className="profile-header">
-                    <div className="profile-name">{user.user}</div>
-                    <div className="profile-email">{user.email}</div>
-                  </div>
+                  
                   <ul className="profile-menu">
-                    <li><Link to="/perfil">Mi Perfil</Link></li>
-                    <li><Link to="/editar-perfil">Configuración</Link></li>
+                    <li>
+                      <Link to="/perfil">
+                        Mi Perfil
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/editar-perfil">
+                        Configuración
+                      </Link>
+                    </li>
                     {user.rol === 'admin' && (
-                      <li className="admin-dropdown-trigger" onClick={toggleAdminMenu}>
-                        <span>Panel de Administración</span>
+                      <li className="admin-dropdown-trigger">
+                        <span>
+                          Panel de Administración
+                        </span>
                         <span className="dropdown-icon">▶</span>
-                        {adminMenuOpen && (
-                          <ul className="admin-dropdown">
-                            <li><Link to="/Admin-panel">Panel Principal</Link></li>
-                            <li><Link to="/Admin-users">Gestionar Usuarios</Link></li>
-                            <li><Link to="/Admin-projects">Gestionar Proyectos</Link></li>
-                            <li><Link to="/Admin-messages">Mensajes</Link></li>
-                          </ul>
-                        )}
+                        <ul className="admin-dropdown">
+                          <li><Link to="/Admin-panel">Panel Principal</Link></li>
+                          <li><Link to="/Admin-users">Gestionar Usuarios</Link></li>
+                          <li><Link to="/Admin-projects">Gestionar Proyectos</Link></li>
+                          <li><Link to="/Admin-messages">Mensajes</Link></li>
+                        </ul>
                       </li>
                     )}
-                    <li className="logout-item" onClick={logout}>Cerrar Sesión</li>
+                    <li className="profile-menu-item logout-item" onClick={logout}>
+                      Cerrar Sesión
+                    </li>
                   </ul>
                 </div>
               )}

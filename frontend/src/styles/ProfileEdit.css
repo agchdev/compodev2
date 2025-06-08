@@ -1,0 +1,313 @@
+/* ProfileEdit.css - Estilos para la página de edición de perfil */
+
+.profile-edit-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  color: #e4e6f1;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Fondo animado para la edición de perfil */
+.profile-edit-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(145deg, #14162c, #1b1e36);
+  overflow: hidden;
+}
+
+.stars-edit, .stars2-edit, .stars3-edit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAATElEQVQYV2NkYGDgY2JiYv7///8/AyMj47+8vLwGBgaG/1jAnz9//jMwMMAx1ASgCmEnT56EMZyBpgoISNZQNFXgUoCmF69CnNaCAQC//ztcNl1detAAAAAASUVORK5CYII=) repeat top center;
+  z-index: 0;
+}
+
+.stars-edit {
+  animation: stars-edit-anim 50s linear infinite;
+  opacity: 0.5;
+}
+
+.stars2-edit {
+  background-position: center 80%;
+  animation: stars2-edit-anim 75s linear infinite;
+  opacity: 0.25;
+}
+
+.stars3-edit {
+  background-position: center 60%;
+  animation: stars3-edit-anim 100s linear infinite;
+  opacity: 0.15;
+}
+
+/* Elementos flotantes decorativos */
+.edit-floating-elements {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.edit-floating-element {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(93, 79, 255, 0.2), rgba(140, 125, 255, 0.1));
+  border-radius: 50%;
+  filter: blur(10px);
+}
+
+.edit-element-1 {
+  width: 300px;
+  height: 300px;
+  top: 10%;
+  right: -150px;
+  animation: float-edit-1 20s ease-in-out infinite alternate;
+}
+
+.edit-element-2 {
+  width: 200px;
+  height: 200px;
+  bottom: 20%;
+  left: -100px;
+  animation: float-edit-2 15s ease-in-out infinite alternate;
+}
+
+.edit-element-3 {
+  width: 150px;
+  height: 150px;
+  top: 40%;
+  right: 10%;
+  animation: float-edit-3 25s ease-in-out infinite alternate;
+}
+
+@keyframes stars-edit-anim {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-600px); }
+}
+
+@keyframes stars2-edit-anim {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-600px); }
+}
+
+@keyframes stars3-edit-anim {
+  0% { transform: translateY(0) translateX(0); }
+  100% { transform: translateY(-200px) translateX(-400px); }
+}
+
+@keyframes float-edit-1 {
+  0% { transform: translateY(0) scale(1) rotate(0deg); }
+  100% { transform: translateY(50px) scale(1.1) rotate(20deg); }
+}
+
+@keyframes float-edit-2 {
+  0% { transform: translateX(0) scale(1) rotate(0deg); }
+  100% { transform: translateX(40px) scale(1.2) rotate(-15deg); }
+}
+
+@keyframes float-edit-3 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-30px, 30px) scale(1.15); }
+}
+
+/* Formulario de edición de perfil */
+.profile-edit-card {
+  background: linear-gradient(145deg, #1f2131, #252836);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(93, 79, 255, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.profile-edit-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, #8c7dff, #5d4fff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #8c7dff;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: rgba(31, 33, 49, 0.8);
+  border: 1px solid rgba(93, 79, 255, 0.3);
+  border-radius: 8px;
+  color: #e4e6f1;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #8c7dff;
+  box-shadow: 0 0 0 2px rgba(140, 125, 255, 0.2);
+}
+
+.form-group small {
+  display: block;
+  color: #a0a3b8;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.password-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(93, 79, 255, 0.2);
+}
+
+.password-title {
+  font-size: 1.3rem;
+  color: #8c7dff;
+  margin-bottom: 1rem;
+}
+
+/* Perfil de imagen */
+.profile-image-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.profile-image-container {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  border: 3px solid #5d4fff;
+  box-shadow: 0 5px 15px rgba(93, 79, 255, 0.4);
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.file-upload-container {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.file-upload-btn {
+  background: linear-gradient(135deg, #5d4fff, #8c7dff);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.file-upload-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(93, 79, 255, 0.4);
+}
+
+.file-upload-input {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.submit-button {
+  background: linear-gradient(135deg, #5d4fff, #8c7dff);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.submit-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(93, 79, 255, 0.4);
+}
+
+.submit-button:disabled {
+  background: linear-gradient(135deg, #6b6b6b, #8e8e8e);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.error-message {
+  background: rgba(255, 79, 79, 0.1);
+  border-left: 4px solid #ff4f4f;
+  color: #ff6a6a;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s infinite linear;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-edit-card {
+    padding: 1.5rem;
+  }
+}

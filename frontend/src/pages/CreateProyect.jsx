@@ -1,19 +1,61 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import '../styles/CreateProject.css';
+import SlidingBanner from '../components/SlidingBanner';
 
 const CreateProyect = () => {
     const [formData, setFormData] = useState({
         titulo: '',
         descripcion_proyecto: '',
-        categoria: ''
+        categoria: 'UI/UX'
     });
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(null);
+    const [particlesGenerated, setParticlesGenerated] = useState(false);
+    const backgroundRef = useRef(null);
     const navigate = useNavigate();
+    
+    // Categorías predefinidas para componentes
+    const categories = [
+        { id: 'ui-ux', name: 'UI/UX' },
+        { id: 'animation', name: 'Animación' },
+        { id: 'navigation', name: 'Navegación' },
+        { id: 'form', name: 'Formularios' },
+        { id: 'cards', name: 'Cards' },
+        { id: 'buttons', name: 'Botones' },
+        { id: 'charts', name: 'Gráficos' },
+        { id: 'tables', name: 'Tablas' },
+        { id: 'layouts', name: 'Layouts' },
+        { id: 'effects', name: 'Efectos' },
+    ];
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
+    
+    // Generar partículas para el fondo animado
+    useEffect(() => {
+        if (!particlesGenerated && backgroundRef.current) {
+            const particlesContainer = backgroundRef.current.querySelector('.particles');
+            if (particlesContainer) {
+                for (let i = 0; i < 20; i++) {
+                    const size = Math.random() * 30 + 5;
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.opacity = `${Math.random() * 0.6 + 0.2}`;
+                    particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+                    particle.style.animationDelay = `${Math.random() * 5}s`;
+                    particlesContainer.appendChild(particle);
+                }
+                setParticlesGenerated(true);
+            }
+        }
+    }, [particlesGenerated]);
 
     useEffect(() => {
         const getSession = async () => {
@@ -40,15 +82,40 @@ const CreateProyect = () => {
             ...formData,
             [name]: value
         });
+        
+        // Limpiar mensajes al modificar el formulario
+        if (error) setError('');
+        if (success) setSuccess('');
+    };
+    
+    // Seleccionar categoría
+    const handleCategorySelect = (category) => {
+        setFormData({
+            ...formData,
+            categoria: category
+        });
+        
+        if (error) setError('');
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
-        // Validar que las contraseñas coincidan
-        if (formData.password !== formData.confirmPassword) {
-            setError('Las contraseñas no coinciden');
+        setSuccess('');
+        
+        // Validaciones básicas
+        if (!formData.titulo.trim()) {
+            setError('El título es obligatorio');
+            return;
+        }
+        
+        if (!formData.descripcion_proyecto.trim()) {
+            setError('La descripción es obligatoria');
+            return;
+        }
+        
+        if (!formData.categoria.trim()) {
+            setError('Debes seleccionar una categoría');
             return;
         }
 
@@ -87,8 +154,13 @@ const CreateProyect = () => {
             const data = response.data;
             console.log('Datos recibidos:', data);
 
-            // Redirigir a la página del home
-            navigate('/code-project/' + data.proyecto.id);
+            // Mostrar mensaje de éxito
+            setSuccess('¡Proyecto creado con éxito!');
+
+            // Redirigir a la página del proyecto después de un breve delay
+            setTimeout(() => {
+                navigate('/code-project/' + data.proyecto.id);
+            }, 1500);
         } catch (err) {
             console.error('Error en la petición:', err);
             setError(err.message || 'Error al conectar con el servidor');
@@ -98,53 +170,82 @@ const CreateProyect = () => {
     };
 
     return (
-        <div>
-            <h2>ZONA DE CARGA DE PROYECTOS</h2>
-
-            {error && <div className="error-message">{error}</div>}
-
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="titulo">Titulo</label>
-                    <input
-                        type="text"
-                        id="titulo"
-                        name="titulo"
-                        value={formData.titulo}
-                        onChange={handleChange}
-                        required
-                        placeholder="Ingresa el titulo del proyecto"
-                    />
+        <div className="create-project-container">
+            {/* Fondo animado */}
+            <div className="animated-background" ref={backgroundRef}>
+                <div className="particles"></div>
+            </div>
+            
+            <div className="create-project-content">
+                <div className="create-project-header">
+                    <h1>Crear Componente</h1>
+                    <p>Comparte tu creatividad con el mundo. Crea un nuevo componente para la comunidad CompoDev.</p>
                 </div>
-                <div>
-                    <label htmlFor="descripcion_proyecto">Descripcion Proyecto</label>
-                    <input
-                        type="text"
-                        id="descripcion_proyecto"
-                        name="descripcion_proyecto"
-                        value={formData.descripcion_proyecto}
-                        onChange={handleChange}
-                        required
-                        placeholder="Ingresa la descripción del proyecto"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="categoria">Categoria</label>
-                    <input
-                        type="text"
-                        id="categoria"
-                        name="categoria"
-                        value={formData.categoria}
-                        onChange={handleChange}
-                        required
-                        placeholder="Ingresa la categoría del proyecto"
-                    />
-                </div>
-
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Cargando...' : 'Crear Proyecto'}
-                </button>
-            </form>
+                
+                {error && <div className="error-message">{error}</div>}
+                {success && <div className="success-message">{success}</div>}
+                
+                <form className="create-project-form" onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="titulo">Título del Componente</label>
+                        <input
+                            type="text"
+                            id="titulo"
+                            name="titulo"
+                            className="form-control"
+                            value={formData.titulo}
+                            onChange={handleChange}
+                            required
+                            placeholder="Ej: Animated Dropdown Menu"
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="descripcion_proyecto">Descripción</label>
+                        <textarea
+                            id="descripcion_proyecto"
+                            name="descripcion_proyecto"
+                            className="form-control"
+                            value={formData.descripcion_proyecto}
+                            onChange={handleChange}
+                            required
+                            placeholder="Describe tu componente, sus características y casos de uso..."
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label>Categoría</label>
+                        <div className="category-selector">
+                            {categories.map((category) => (
+                                <div
+                                    key={category.id}
+                                    className={`category-option ${formData.categoria === category.name ? 'selected' : ''}`}
+                                    onClick={() => handleCategorySelect(category.name)}
+                                >
+                                    <span>{category.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        className="submit-button" 
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <>
+                                <div className="loading-container">
+                                    <div className="loader"></div>
+                                    <span>Creando componente...</span>
+                                </div>
+                            </>
+                        ) : 'Crear Componente'}
+                    </button>
+                </form>
+            </div>
+            
+            <SlidingBanner text="COMPODEV" />
         </div>
     )
 }

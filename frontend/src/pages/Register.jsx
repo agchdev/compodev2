@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import '../styles/Auth.css';
+import '../styles/AnimatedBackground.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +18,20 @@ const Register = () => {
   const [urlFoto, setUrlFoto] = useState('');
   const [urlFotoPhp, setUrlFotoPhp] = useState(null);
   const navigate = useNavigate();
+  const backgroundRef = useRef(null);
+
+  // Generar elementos flotantes para el fondo
+  useEffect(() => {
+    if (backgroundRef.current) {
+      const elements = backgroundRef.current.querySelectorAll('.floating-element');
+      elements.forEach(element => {
+        const randomX = Math.random() * 100;
+        const randomY = Math.random() * 100;
+        element.style.setProperty('--random-x', `${randomX}%`);
+        element.style.setProperty('--random-y', `${randomY}%`);
+      });
+    }
+  }, []);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -113,32 +129,77 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <h2>Crear Cuenta</h2>
+    <div className="auth-page-container">
+      {/* Nuevo fondo animado futurista */}
+      <div className="cyber-background">
+        {/* Partículas */}
+        <div className="particles-container">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+        </div>
+        
+        {/* Efecto de cuadrícula */}
+        <div className="grid-container"></div>
+        
+        {/* Formas geométricas */}
+        <div className="cyber-shape hexagon shape-1"></div>
+        <div className="cyber-shape triangle shape-2"></div>
+        <div className="cyber-shape circle shape-3"></div>
+        <div className="cyber-shape rectangle shape-4"></div>
+        
+        {/* Líneas digitales */}
+        <div className="digital-lines">
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="v-line"></div>
+          <div className="v-line"></div>
+        </div>
+      </div>
+      
+      {/* Elementos flotantes decorativos */}
+      <div className="floating-elements" ref={backgroundRef}>
+        <div className="floating-element element-1"></div>
+        <div className="floating-element element-2"></div>
+        <div className="floating-element element-3"></div>
+      </div>
+    
+      <div className="auth-form-card">
+        <h1 className="auth-title">Crear Cuenta</h1>
+        <p className="auth-subtitle">Únete a la comunidad de CompoDev y comparte tus componentes</p>
 
         {error && <div className="error-message">{error}</div>}
 
-        <form onSubmit={handleSubmit}>
+        <form className="auth-login-form" onSubmit={handleSubmit}>
           <img
             src={urlFoto || "/uploads/deafult.jpg"}
             alt="foto"
-            className="w-50 h-50 rounded-3xl mb-4 object-cover"
+            className="image-preview"
           />
-          <div className="form-group">
+          <div className="file-input-container">
+            <label htmlFor="profile-photo" className="file-input-label">
+              Seleccionar imagen de perfil
+            </label>
             <input
-              className='py-2 px-4 rounded-2xl '
+              id="profile-photo"
+              className="file-input"
               type="file"
               accept="image/*"
               onChange={handleFotoSeleccionada}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="user">Nombre de usuario</label>
+            <label htmlFor="user">Nombre de Usuario</label>
             <input
               type="text"
               id="user"
               name="user"
+              className="form-control"
               value={formData.user}
               onChange={handleChange}
               required
@@ -147,15 +208,16 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Correo Electrónico</label>
             <input
               type="email"
               id="email"
               name="email"
+              className="form-control"
               value={formData.email}
               onChange={handleChange}
               required
-              placeholder="Ingresa tu email"
+              placeholder="Ingresa tu correo electrónico"
             />
           </div>
 
@@ -165,6 +227,7 @@ const Register = () => {
               type="password"
               id="password"
               name="password"
+              className="form-control"
               value={formData.password}
               onChange={handleChange}
               required
@@ -178,6 +241,7 @@ const Register = () => {
               type="password"
               id="confirmPassword"
               name="confirmPassword"
+              className="form-control"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
@@ -190,6 +254,7 @@ const Register = () => {
             <textarea
               id="descripcion"
               name="descripcion"
+              className="form-control"
               value={formData.descripcion}
               onChange={handleChange}
               placeholder="Escribe una breve descripción sobre ti"
@@ -197,119 +262,20 @@ const Register = () => {
             ></textarea>
           </div>
 
-          <button type="submit" className="register-button" disabled={loading}>
-            {loading ? 'Registrando...' : 'Registrarse'}
+          <button type="submit" className="auth-submit-button" disabled={loading}>
+            {loading ? (
+              <div className="loading-container">
+                <div className="loader"></div>
+                <span>Registrando cuenta...</span>
+              </div>
+            ) : 'Registrarse'}
           </button>
         </form>
 
-        <div className="login-link">
+        <div className="auth-alternate-link">
           ¿Ya tienes una cuenta? <Link to="/login">Inicia sesión aquí</Link>
         </div>
       </div>
-
-      {/* Estilos aplicados como objeto de estilo en línea */}
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        .register-container {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 80vh;
-          padding: 20px;
-        }
-        
-        .register-card {
-          background-color: white;
-          border-radius: 8px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          padding: 30px;
-          width: 100%;
-          max-width: 500px;
-        }
-        
-        h2 {
-          text-align: center;
-          margin-bottom: 24px;
-          color: #333;
-        }
-        
-        .form-group {
-          margin-bottom: 20px;
-        }
-        
-        label {
-          display: block;
-          margin-bottom: 8px;
-          font-weight: 500;
-          color: #555;
-        }
-        
-        input, textarea {
-          width: 100%;
-          padding: 12px;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          font-size: 16px;
-          font-family: inherit;
-        }
-        
-        input:focus, textarea:focus {
-          outline: none;
-          border-color: #4a90e2;
-          box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-        }
-        
-        textarea {
-          resize: vertical;
-        }
-        
-        .register-button {
-          width: 100%;
-          padding: 12px;
-          background-color: #4a90e2;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          font-size: 16px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: background-color 0.2s;
-        }
-        
-        .register-button:hover {
-          background-color: #3a7bc8;
-        }
-        
-        .register-button:disabled {
-          background-color: #a0c1e8;
-          cursor: not-allowed;
-        }
-        
-        .error-message {
-          background-color: #ffebee;
-          color: #d32f2f;
-          padding: 10px;
-          border-radius: 4px;
-          margin-bottom: 20px;
-          text-align: center;
-        }
-        
-        .login-link {
-          text-align: center;
-          margin-top: 20px;
-          color: #666;
-        }
-        
-        .login-link a {
-          color: #4a90e2;
-          text-decoration: none;
-          font-weight: 500;
-        }
-        
-        .login-link a:hover {
-          text-decoration: underline;
-        }
-      `}} />
     </div>
   );
 };

@@ -1,0 +1,511 @@
+/* AdminPanel.css - Estilos para el panel de administración con estética futurista Web3 */
+
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #e0e6fd;
+    position: relative;
+    z-index: 10;
+    min-height: calc(100vh - 80px);
+    font-family: 'Roboto', sans-serif;
+}
+
+.admin-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.admin-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(120, 70, 255, 0.7), 0 0 20px rgba(120, 70, 255, 0.5);
+    letter-spacing: 1px;
+}
+
+.admin-subtitle {
+    font-size: 1.2rem;
+    color: #a0a7dd;
+    margin-bottom: 2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.stats-card {
+    background: rgba(15, 23, 42, 0.7);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(149, 128, 255, 0.2);
+    border: 1px solid rgba(149, 128, 255, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 25px rgba(149, 128, 255, 0.4);
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(149, 128, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.8s ease;
+    opacity: 0;
+}
+
+.stats-card:hover::before {
+    animation: shine 1.5s infinite;
+    opacity: 1;
+}
+
+.stats-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(149, 128, 255, 0.3);
+    padding-bottom: 0.8rem;
+}
+
+.stats-card h2 .icon {
+    margin-right: 10px;
+    background: linear-gradient(135deg, #9580ff, #50c5ff);
+    border-radius: 50%;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stats-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(149, 128, 255, 0.1);
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: #a0a7dd;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(90deg, #9580ff, #50c5ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    border: 1px solid rgba(149, 128, 255, 0.3);
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.admin-button {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #7846ff, #5e3fd8);
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(120, 70, 255, 0.3);
+}
+
+.admin-button:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #8656ff, #6e4fe8);
+    box-shadow: 0 7px 15px rgba(120, 70, 255, 0.4);
+}
+
+.admin-button:active {
+    transform: translateY(0);
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    flex-direction: column;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 3px solid rgba(149, 128, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #7846ff;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+.error-container {
+    text-align: center;
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 2rem auto;
+    max-width: 600px;
+}
+
+.error-message {
+    color: #f87171;
+    font-size: 1.1rem;
+}
+
+/* Animaciones */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes shine {
+    0% {
+        left: -100%;
+        opacity: 0;
+    }
+    20% {
+        left: 100%;
+        opacity: 0.3;
+    }
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+/* Fondo animado futurista - Heredado de otras páginas */
+.cyber-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    overflow: hidden;
+}
+
+/* Partículas */
+.particles-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(149, 128, 255, 0.7);
+    border-radius: 50%;
+    animation: float 20s infinite linear;
+}
+
+.particle:nth-child(1) {
+    top: 20%;
+    left: 10%;
+    animation-duration: 45s;
+}
+
+.particle:nth-child(2) {
+    top: 60%;
+    left: 30%;
+    animation-duration: 38s;
+    animation-delay: 2s;
+}
+
+.particle:nth-child(3) {
+    top: 25%;
+    left: 60%;
+    animation-duration: 52s;
+    animation-delay: 5s;
+}
+
+.particle:nth-child(4) {
+    top: 10%;
+    left: 80%;
+    animation-duration: 42s;
+    animation-delay: 1s;
+}
+
+.particle:nth-child(5) {
+    top: 70%;
+    left: 85%;
+    animation-duration: 56s;
+    animation-delay: 3s;
+}
+
+.particle:nth-child(6) {
+    top: 45%;
+    left: 15%;
+    animation-duration: 48s;
+    animation-delay: 7s;
+}
+
+.particle:nth-child(7) {
+    top: 85%;
+    left: 40%;
+    animation-duration: 60s;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(50px, 100px);
+    }
+    50% {
+        transform: translate(100px, -50px);
+    }
+    75% {
+        transform: translate(-50px, -100px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+/* Efecto de cuadrícula */
+.grid-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(149, 128, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(149, 128, 255, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: grid-move 30s infinite linear;
+}
+
+@keyframes grid-move {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 40px 40px;
+    }
+}
+
+/* Formas geométricas */
+.cyber-shape {
+    position: absolute;
+    opacity: 0.15;
+    filter: blur(4px);
+}
+
+.hexagon {
+    width: 150px;
+    height: 150px;
+    background-color: #7846ff;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    animation: rotate 30s infinite linear;
+}
+
+.triangle {
+    width: 120px;
+    height: 120px;
+    background-color: #50c5ff;
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    animation: rotate 50s infinite linear reverse;
+}
+
+.circle {
+    width: 100px;
+    height: 100px;
+    background-color: #ff4af0;
+    border-radius: 50%;
+    animation: pulse 20s infinite alternate;
+}
+
+.rectangle {
+    width: 200px;
+    height: 80px;
+    background-color: #3db9fc;
+    animation: rotate 35s infinite linear;
+}
+
+.shape-1 {
+    top: 15%;
+    left: 10%;
+}
+
+.shape-2 {
+    top: 70%;
+    left: 20%;
+}
+
+.shape-3 {
+    top: 25%;
+    left: 85%;
+}
+
+.shape-4 {
+    top: 80%;
+    left: 80%;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg) translateY(50px);
+    }
+    to {
+        transform: rotate(360deg) translateY(50px);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.2;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0.1;
+    }
+}
+
+/* Líneas digitales */
+.digital-lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    opacity: 0.2;
+}
+
+.h-line, .v-line {
+    position: absolute;
+    background: linear-gradient(90deg, transparent, #7846ff, transparent);
+}
+
+.h-line {
+    height: 1px;
+    width: 100%;
+    animation: h-line-move 15s infinite linear;
+}
+
+.h-line:nth-child(1) {
+    top: 25%;
+    animation-duration: 15s;
+}
+
+.h-line:nth-child(2) {
+    top: 45%;
+    animation-duration: 20s;
+    animation-delay: 5s;
+}
+
+.h-line:nth-child(3) {
+    top: 75%;
+    animation-duration: 18s;
+    animation-delay: 2s;
+}
+
+.v-line {
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, #7846ff, transparent);
+    animation: v-line-move 20s infinite linear;
+}
+
+.v-line:nth-child(4) {
+    left: 30%;
+    animation-duration: 22s;
+}
+
+.v-line:nth-child(5) {
+    left: 70%;
+    animation-duration: 25s;
+    animation-delay: 7s;
+}
+
+@keyframes h-line-move {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes v-line-move {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(100%);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-title {
+        font-size: 2rem;
+    }
+    
+    .admin-subtitle {
+        font-size: 1rem;
+    }
+    
+    .stats-card h2 {
+        font-size: 1.3rem;
+    }
+    
+    .admin-container {
+        padding: 1rem;
+    }
+}

@@ -94,13 +94,13 @@
   width: 100%;
 }
 
-/* Auth Container */
+/* Header Auth Container */
 .auth-container {
   display: flex;
   align-items: center;
 }
 
-/* Auth Buttons */
+/* Header Auth Buttons */
 .auth-buttons {
   display: flex;
   gap: 1rem;
@@ -178,61 +178,136 @@
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
-  width: 250px;
+  width: 280px;
   background-color: #1a1a25;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(93, 79, 255, 0.1);
   overflow: hidden;
   z-index: 100;
+  animation: dropdown-appear 0.2s ease-out;
+  transform-origin: top right;
 }
 
 .profile-header {
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: rgba(29, 29, 42, 0.9);
+  border-bottom: 1px solid rgba(93, 79, 255, 0.15);
+  position: relative;
+}
+
+.profile-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(93, 79, 255, 0.5), transparent);
 }
 
 .profile-name {
   color: white;
   font-weight: 600;
-  margin-bottom: 0.3rem;
-  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-name::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #5d4fff, #ff4f9b);
+  border-radius: 50%;
 }
 
 .profile-email {
-  color: #aaaaaa;
+  color: #9090a0;
   font-size: 0.85rem;
+  opacity: 0.9;
+  padding-left: 1rem;
+  border-left: 2px solid rgba(93, 79, 255, 0.3);
+  margin-left: 0.25rem;
 }
 
 .profile-menu {
   list-style: none;
   margin: 0;
-  padding: 0.5rem 0;
+  padding: 0.8rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
 .profile-menu li {
   padding: 0;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  border-left: 0px solid transparent;
 }
 
 .profile-menu li a, 
 .profile-menu li span,
 .profile-menu .logout-item {
-  display: block;
-  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  padding: 0.9rem 1.5rem;
   color: white;
   text-decoration: none;
   font-size: 0.9rem;
   cursor: pointer;
+  transition: all 0.2s ease-out;
+  position: relative;
+}
+
+.profile-menu li a::before, 
+.profile-menu li span::before,
+.profile-menu .logout-item::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: rgba(140, 125, 255, 0.5);
+  border-radius: 50%;
+  margin-right: 10px;
+  transition: all 0.2s ease;
 }
 
 .profile-menu li:hover {
   background-color: rgba(93, 79, 255, 0.1);
+  border-left: 5px solid rgba(93, 79, 255, 0.8);
+}
+
+.profile-menu li:hover a::before,
+.profile-menu li:hover span::before,
+.profile-menu li:hover .logout-item::before {
+  background-color: rgb(140, 125, 255);
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(140, 125, 255, 0.8);
 }
 
 .logout-item {
   color: #ff4f9b !important;
+  margin-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.8rem !important;
+}
+
+.logout-item::before {
+  background-color: rgba(255, 79, 155, 0.5) !important;
+}
+
+@keyframes dropdown-appear {
+  from { 
+    opacity: 0; 
+    transform: scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
 }
 
 /* Admin Panel Dropdown */
@@ -254,6 +329,13 @@
   transform: translateX(3px);
 }
 
+/* Show admin dropdown on hover */
+.admin-dropdown-trigger:hover .admin-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
 .admin-dropdown {
   position: absolute;
   top: 0;
@@ -268,6 +350,11 @@
   list-style: none;
   margin: 0;
   padding: 0.5rem 0;
+  /* Hide by default */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(10px);
+  transition: all 0.3s ease;
 }
 
 /* Mobile Menu */

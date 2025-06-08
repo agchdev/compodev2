@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import './Search.css';
+import '../styles/Search.css';
+import '../styles/AnimatedBackground.css';
+import SlidingBanner from '../components/SlidingBanner';
 
 export default function Search() {
   // Estado para proyectos
@@ -244,8 +246,46 @@ export default function Search() {
   const usersPageNumbers = getUsersPageNumbers();
   
   return (
-    <div className="search-container">
-      <h2>Búsqueda</h2>
+    <div className="search-page">
+      {/* Nuevo fondo animado futurista */}
+      <div className="cyber-background">
+        {/* Partículas */}
+        <div className="particles-container">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+        </div>
+        
+        {/* Efecto de cuadrícula */}
+        <div className="grid-container"></div>
+        
+        {/* Formas geométricas */}
+        <div className="cyber-shape hexagon shape-1"></div>
+        <div className="cyber-shape triangle shape-2"></div>
+        <div className="cyber-shape circle shape-3"></div>
+        <div className="cyber-shape rectangle shape-4"></div>
+        
+        {/* Líneas digitales */}
+        <div className="digital-lines">
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="v-line"></div>
+          <div className="v-line"></div>
+        </div>
+      </div>
+      {/* Header Section */}
+      <div className="search-header mt-20">
+        <h1>Buscador <span className="accent">CompoDev</span></h1>
+        <p>Encuentra componentes y desarrolladores para impulsar tus proyectos web</p>
+      </div>
+      
+      {/* Formulario de búsqueda con estética renovada */}
+      <div className="search-form-container">
       
       {/* Pestañas de navegación */}
       <div className="search-tabs">
@@ -279,9 +319,12 @@ export default function Search() {
       {loading && <div className="loading">Cargando...</div>}
       {error && <div className="error">{error}</div>}
       
+      </div>
+      
       {/* Contenido según la pestaña seleccionada */}
       {!loading && !error && searchType === 'projects' && (
-        <>
+        <div className="results-container">
+          <h2>Componentes Encontrados</h2>
           {/* Lista de proyectos */}
           <div className="projects-grid">
             {projects.length > 0 ? (
@@ -340,12 +383,13 @@ export default function Search() {
               </button>
             </div>
           )}
-        </>
+        </div>
       )}
       
       {/* Lista de usuarios */}
       {!loading && !error && searchType === 'users' && (
-        <>
+        <div className="results-container">
+          <h2>Usuarios Encontrados</h2>
           <div className="users-list">
             {users.length > 0 ? (
               users.map((user) => (
@@ -421,7 +465,12 @@ export default function Search() {
               </button>
             </div>
           )}
-        </>
+        </div>
+      )}
+      
+      {/* SlidingBanner al final de la página */}
+      {!loading && !error && (projects.length > 0 || users.length > 0) && (
+        <SlidingBanner text="COMPODEV" />
       )}
     </div>
   );

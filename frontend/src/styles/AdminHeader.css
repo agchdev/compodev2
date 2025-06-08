@@ -1,0 +1,195 @@
+/* AdminHeader.css - Futuristic admin header navigation */
+
+.admin-header {
+  background-color: rgba(20, 20, 32, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(93, 79, 255, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(93, 79, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 900;
+}
+
+.admin-header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  height: 60px;
+}
+
+/* Admin Logo */
+.admin-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-logo-text {
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ffffff, #bbbbbb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -1px;
+}
+
+.admin-logo-accent {
+  background: linear-gradient(90deg, #5d4fff, #ff4f9b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.admin-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #5d4fff, #ff4f9b);
+  padding: 3px 8px;
+  border-radius: 4px;
+  color: white;
+  letter-spacing: 1px;
+  margin-left: 8px;
+  box-shadow: 0 2px 8px rgba(93, 79, 255, 0.3);
+}
+
+/* Admin Navigation */
+.admin-nav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.admin-nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+.admin-nav-links li {
+  position: relative;
+}
+
+.admin-nav-links li a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.5rem 0.8rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+}
+
+.admin-nav-links li a:hover {
+  color: #fff;
+  background-color: rgba(93, 79, 255, 0.1);
+}
+
+.admin-nav-links li.active a {
+  color: white;
+  background: linear-gradient(45deg, rgba(93, 79, 255, 0.12), rgba(255, 79, 155, 0.12));
+  border-left: 3px solid rgba(93, 79, 255, 0.8);
+}
+
+.admin-nav-links li.active::after {
+  content: '';
+  position: absolute;
+  bottom: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: rgba(93, 79, 255, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(93, 79, 255, 0.6);
+}
+
+/* Admin Tools */
+.admin-tools {
+  display: flex;
+  align-items: center;
+}
+
+.admin-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.admin-back:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.admin-back-icon {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.admin-back:hover .admin-back-icon {
+  transform: translateX(-3px);
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .admin-header-container {
+    padding: 0.6rem 1rem;
+  }
+  
+  .admin-nav-links {
+    gap: 1rem;
+  }
+  
+  .admin-back-text {
+    display: none;
+  }
+  
+  .admin-back {
+    padding: 0.5rem;
+  }
+  
+  .admin-back-icon {
+    margin: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-nav-links {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(20, 20, 32, 0.95);
+    border-top: 1px solid rgba(93, 79, 255, 0.2);
+    padding: 0.8rem 1rem;
+    justify-content: space-around;
+    gap: 0;
+    z-index: 900;
+  }
+  
+  .admin-nav-links li.active::after {
+    bottom: auto;
+    top: -11px;
+  }
+  
+  .admin-nav {
+    position: static;
+  }
+}

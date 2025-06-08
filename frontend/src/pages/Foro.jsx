@@ -1,126 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Foro.css';
+import '../styles/AnimatedBackground.css';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-// Estilos CSS en línea
-const styles = {
-  container: {
-    padding: '16px',
-    maxWidth: '900px',
-    margin: '0 auto'
-  },
-  title: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    marginBottom: '16px'
-  },
-  messageCard: {
-    border: '1px solid #e0e0e0',
-    borderRadius: '8px',
-    padding: '16px',
-    marginBottom: '16px',
-    backgroundColor: 'white',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    transition: 'all 0.2s ease'
-  },
-  commentSection: {
-    padding: '16px',
-    backgroundColor: '#f5f5f5',
-    borderRadius: '8px',
-    marginTop: '8px'
-  },
-  flexRow: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  avatar: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '50%',
-    backgroundColor: '#1976d2',
-    color: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: '12px',
-    fontWeight: 'bold'
-  },
-  smallAvatar: {
-    width: '32px',
-    height: '32px',
-    borderRadius: '50%',
-    backgroundColor: '#1976d2',
-    color: 'white',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: '8px',
-    fontWeight: 'bold',
-    fontSize: '12px'
-  },
-  button: {
-    backgroundColor: '#1976d2',
-    color: 'white',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    fontWeight: 'bold'
-  },
-  disabledButton: {
-    backgroundColor: '#cccccc',
-    cursor: 'not-allowed'
-  },
-  textField: {
-    width: '100%',
-    padding: '8px',
-    border: '1px solid #e0e0e0',
-    borderRadius: '4px',
-    marginBottom: '16px',
-    fontSize: '14px'
-  },
-  commentCard: {
-    backgroundColor: '#f9f9f9',
-    border: '1px solid #e0e0e0',
-    borderRadius: '8px',
-    padding: '8px',
-    marginBottom: '8px'
-  },
-  loading: {
-    display: 'flex',
-    justifyContent: 'center',
-    margin: '20px 0',
-    color: '#1976d2'
-  },
-  divider: {
-    borderTop: '1px solid #e0e0e0',
-    margin: '16px 0'
-  },
-  userName: {
-    fontWeight: 'bold',
-    margin: '0 0 4px 0'
-  },
-  date: {
-    color: '#666',
-    fontSize: '12px',
-    margin: '2px 0'
-  },
-  notification: {
-    position: 'fixed',
-    bottom: '20px',
-    right: '20px',
-    padding: '10px 20px',
-    borderRadius: '4px',
-    color: 'white',
-    zIndex: 1000,
-    boxShadow: '0 2px 10px rgba(0,0,0,0.2)'
-  },
-  formContainer: {
-    marginBottom: '32px'
-  }
-};
 
 const Foro = () => {
     const navigate = useNavigate();
@@ -132,40 +16,18 @@ const Foro = () => {
     const [comments, setComments] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [newComment, setNewComment] = useState('');
-    const [notification, setNotification] = useState({show: false, message: '', type: ''});
-
-    // Obtener la sesión del usuario
-    useEffect(() => {
-        const getSession = async () => {
-            try {
-                const response = await axios.get(
-                    `${backendUrl}/users/UserController.php?action=session`,
-                    { withCredentials: true }
-                );
-                const userData = response.data;
-                setUser(userData);
-                
-                // Una vez que tenemos el usuario, cargamos los mensajes
-                fetchMessages();
-            } catch (error) {
-                console.error("Error al obtener la sesión:", error);
-                navigate('/login');
-            }
-        };
-        
-        getSession();
-    }, [navigate]);
+    const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
     // Sistema de notificación personalizado
-    const showNotification = (message, type) => {
+    const showNotification = useCallback((message, type) => {
         setNotification({ show: true, message, type });
         setTimeout(() => {
             setNotification({ show: false, message: '', type: '' });
         }, 3000);
-    };
+    }, []);
 
     // Obtener los últimos 10 mensajes
-    const fetchMessages = async () => {
+    const fetchMessages = useCallback(async () => {
         try {
             setLoading(true);
             const response = await axios.get(
@@ -181,7 +43,33 @@ const Foro = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [showNotification]);
+
+    // Obtener la sesión del usuario
+    useEffect(() => {
+        const getSession = async () => {
+            try {
+                const response = await axios.get(
+                    `${backendUrl}/users/UserController.php?action=session`,
+                    { withCredentials: true }
+                );
+                const userData = response.data;
+                setUser(userData);
+
+                // Una vez que tenemos el usuario, cargamos los mensajes
+                fetchMessages();
+            } catch (error) {
+                console.error("Error al obtener la sesión:", error);
+                navigate('/login');
+            }
+        };
+
+        getSession();
+    }, [navigate, fetchMessages]);
+
+
+
+
 
     // Obtener comentarios de un mensaje
     const fetchComments = async (messageId) => {
@@ -254,7 +142,7 @@ const Foro = () => {
             showNotification("El comentario no puede estar vacío", "error");
             return;
         }
-        
+
         if (!selectedMessage || !selectedMessage.id) {
             showNotification("Error: No hay mensaje seleccionado", "error");
             return;
@@ -272,25 +160,25 @@ const Foro = () => {
             };
             // Convertir explícitamente a string para asegurar que no hay problemas de tipo
             postData.texto = String(postData.texto);
-            
+
             console.log('Enviando comentario con datos:', JSON.stringify(postData));
-            
+
             // Asegurar que la URL tiene una barra al final si es necesario
             const url = `${backendUrl}/comments_users/CommentsUserController.php?action=create`;
             console.log('URL de envío:', url);
-            
+
             const response = await axios.post(
                 url,
                 postData,
-                { 
-                  withCredentials: true,
-                  headers: {
-                    'Content-Type': 'application/json'
-                  }
+                {
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }
             );
             console.log('Respuesta del servidor:', response.data);
-            
+
             showNotification("Comentario publicado con éxito", "success");
             setNewComment('');
             fetchComments(selectedMessage.id); // Recargar la lista de comentarios
@@ -319,187 +207,184 @@ const Foro = () => {
         return username.charAt(0).toUpperCase();
     };
 
-    // Componente de notificación
-    const Notification = () => {
-        if (!notification.show) return null;
-        
-        const backgroundColor = 
-            notification.type === 'success' ? '#4caf50' : 
-            notification.type === 'warning' ? '#ff9800' : 
-            notification.type === 'error' ? '#f44336' : '#2196f3';
-        
-        return (
-            <div style={{...styles.notification, backgroundColor}}>
-                {notification.message}
-            </div>
-        );
-    };
-
     return (
-        <div style={styles.container}>
-            <Notification />
-            <h1 style={styles.title}>Foro de la comunidad</h1>
+        <div className="foro-container">
+            {/* Nuevo fondo animado futurista */}
+            <div className="cyber-background">
+                {/* Partículas */}
+                <div className="particles-container">
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                </div>
 
-            {/* Formulario para publicar mensaje */}
-            <div style={styles.formContainer}>
-                <form onSubmit={handlePostMessage}>
-                    <div style={styles.flexRow}>
-                        <div style={styles.avatar}>
-                            {user ? getUserInitials(user.username) : '?'}
-                        </div>
-                        <div style={{flex: 1}}>
-                            <p style={{fontWeight: 'bold', margin: '0'}}>
-                                {user ? user.username : 'Cargando...'}
-                            </p>
-                        </div>
-                    </div>
+                {/* Efecto de cuadrícula */}
+                <div className="grid-container"></div>
+
+                {/* Formas geométricas */}
+                <div className="cyber-shape hexagon shape-1"></div>
+                <div className="cyber-shape triangle shape-2"></div>
+                <div className="cyber-shape circle shape-3"></div>
+                <div className="cyber-shape rectangle shape-4"></div>
+
+                {/* Líneas digitales */}
+                <div className="digital-lines">
+                    <div className="h-line"></div>
+                    <div className="h-line"></div>
+                    <div className="h-line"></div>
+                    <div className="v-line"></div>
+                    <div className="v-line"></div>
+                </div>
+            </div>
+
+            <h1 className="foro-title">Foro de CompoDev</h1>
+
+            {/* Formulario para crear un nuevo mensaje */}
+            <div className="form-container">
+                <form onSubmit={handlePostMessage} className="foro-form">
                     <textarea
-                        placeholder="¿Qué estás pensando?"
-                        style={styles.textField}
-                        rows={3}
+                        placeholder="¿Qué quieres compartir?"
+                        className="foro-textarea"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
                         disabled={!user}
-                    />
-                    <button 
+                        rows="3"
+                    ></textarea>
+                    <button
                         type="submit"
-                        style={{
-                            ...styles.button, 
-                            ...((!user || !newMessage.trim()) ? styles.disabledButton : {})
-                        }}
+                        className="foro-submit-btn"
                         disabled={!user || !newMessage.trim()}
                     >
-                        Publicar
+                        Publicar mensaje
                     </button>
                 </form>
             </div>
 
-            <div style={styles.divider}></div>
+            <div className="foro-divider"></div>
 
-            <h2 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '16px'}}>
+            <h2 className="section-title">
                 Últimas publicaciones
             </h2>
 
-            {/* Lista de mensajes */}
-            {loading ? (
-                <div style={styles.loading}>
-                    <p>Cargando mensajes...</p>
-                </div>
-            ) : messages.length === 0 ? (
-                <p style={{textAlign: 'center', color: '#666', margin: '16px 0'}}>
-                    No hay publicaciones todavía. ¡Sé el primero en publicar!
-                </p>
-            ) : (
-                messages.map((message) => (
-                    
-                    <div key={message.id} style={styles.messageCard}>
-                        {console.log(message)}
-                        <div style={styles.flexRow}>
-                            <div style={styles.avatar}>
-                                {getUserInitials(message.username)}
-                            </div>
-                            <div>
-                                <p style={styles.userName}>
-                                    {message.username || 'Usuario'}
-                                </p>
-                                <p style={styles.date}>
-                                    {formatDate(message.fecha)}
-                                </p>
-                            </div>
-                        </div>
-
-                        <p style={{margin: '16px 0'}}>
-                            {message.texto}
-                        </p>
-
-                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                            <button 
-                                style={{
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    color: '#666'
-                                }}
-                                onClick={() => handleMessageClick(message)}
-                            >
-                                Comentar
-                            </button>
-                            <button 
-                                style={{
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    color: '#1976d2'
-                                }}
-                            >
-                                Me gusta
-                            </button>
-                        </div>
-
-                        {selectedMessage && selectedMessage.id === message.id && (
-                            <div style={styles.commentSection}>
-                                {/* Formulario para comentar */}
-                                <form onSubmit={handlePostComment} style={{display: 'flex', marginBottom: '16px'}}>
-                                    <input
-                                        type="text"
-                                        placeholder="Escribe un comentario..."
-                                        style={{...styles.textField, marginBottom: 0, marginRight: '8px'}}
-                                        value={newComment}
-                                        onChange={(e) => setNewComment(e.target.value)}
-                                        disabled={!user}
-                                    />
-                                    <button
-                                        type="submit"
-                                        style={{
-                                            ...styles.button, 
-                                            ...(!user || !newComment.trim() ? styles.disabledButton : {})
-                                        }}
-                                        disabled={!user || !newComment.trim()}
-                                    >
-                                        Enviar
-                                    </button>
-                                </form>
-
-                                <div style={styles.divider}></div>
-                                
-                                {loadingComments ? (
-                                    <div style={styles.loading}>
-                                        <p>Cargando comentarios...</p>
-                                    </div>
-                                ) : comments.length === 0 ? (
-                                    <p style={{textAlign: 'center', color: '#666', margin: '16px 0'}}>
-                                        No hay comentarios todavía. ¡Sé el primero en comentar!
-                                    </p>
-                                ) : (
-                                    <div>
-                                        {comments.map((comment) => (
-                                            <div key={comment.id} style={styles.commentCard}>
-                                                <div style={styles.flexRow}>
-                                                    <div style={styles.smallAvatar}>
-                                                        {getUserInitials(comment.username)}
-                                                    </div>
-                                                    <div>
-                                                        <p style={styles.userName}>
-                                                            {comment.username || 'Usuario'}
-                                                        </p>
-                                                        <p style={styles.date}>
-                                                            {formatDate(comment.fecha)}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <p style={{marginTop: '8px', fontSize: '14px'}}>
-                                                    {comment.texto}
-                                                </p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        )}
+            {/* Mensajes */}
+            <div className="messages-container">
+                {loading ? (
+                    <div className="loading-state">
+                        <p>Cargando mensajes...</p>
                     </div>
-                ))
+                ) : messages.length === 0 ? (
+                    <div className="empty-state">
+                        <p>No hay mensajes todavía.</p>
+                        <p>¡Sé el primero en publicar!</p>
+                    </div>
+                ) : (
+                    messages.map((message) => (
+
+                        <div key={message.id} className="message-card">
+                            {console.log(message)}
+                            <div className="flex-row">
+                                <div className="user-avatar">
+                                    {getUserInitials(message.username)}
+                                </div>
+                                <div>
+                                    <p className="user-name">
+                                        {message.username || 'Usuario'}
+                                    </p>
+                                    <p className="post-date">
+                                        {formatDate(message.fecha)}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p className="message-text">
+                                {message.texto}
+                            </p>
+
+                            <div className="message-actions">
+                                <button
+                                    className="action-button comment-button"
+                                    onClick={() => handleMessageClick(message)}
+                                >
+                                    Comentar
+                                </button>
+                                <button
+                                    className="action-button like-button"
+                                >
+                                    Me gusta
+                                </button>
+                            </div>
+
+                            {selectedMessage && selectedMessage.id === message.id && (
+                                <div className="comments-section">
+                                    {/* Formulario para comentar */}
+                                    <form onSubmit={handlePostComment} className="comment-form">
+                                        <input
+                                            type="text"
+                                            placeholder="Escribe un comentario..."
+                                            className="comment-input"
+                                            value={newComment}
+                                            onChange={(e) => setNewComment(e.target.value)}
+                                            disabled={!user}
+                                        />
+                                        <button
+                                            type="submit"
+                                            className="comment-submit-btn"
+                                            disabled={!user || !newComment.trim()}
+                                        >
+                                            Enviar
+                                        </button>
+                                    </form>
+
+                                    <div className="comments-divider"></div>
+
+                                    {loadingComments ? (
+                                        <div className="loading-state">
+                                            <p>Cargando comentarios...</p>
+                                        </div>
+                                    ) : comments.length === 0 ? (
+                                        <div className="empty-state">
+                                            <p>No hay comentarios todavía.</p>
+                                            <p>¡Sé el primero en comentar!</p>
+                                        </div>
+                                    ) : (
+                                        <div className="comments-list">
+                                            {comments.map((comment) => (
+                                                <div key={comment.id} className="comment-card">
+                                                    <div className="comment-header">
+                                                        <div className="comment-avatar">
+                                                            {getUserInitials(comment.username)}
+                                                        </div>
+                                                        <div className="comment-user-info">
+                                                            <p className="comment-username">
+                                                                {comment.username || 'Usuario'}
+                                                            </p>
+                                                            <p className="comment-date">
+                                                                {formatDate(comment.fecha)}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <p className="comment-text">
+                                                        {comment.texto}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    ))
+                )}
+            </div>
+
+            {notification.show && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
             )}
         </div>
     );

@@ -1,10 +1,22 @@
-import { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Pagination, Alert } from 'react-bootstrap';
-import { FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../assets/adminProjects.css';
+import AdminHeader from '../components/AdminHeader';
+import { 
+  FaEdit, 
+  FaTrash, 
+  FaSearch, 
+  FaTimes, 
+  FaUsers,
+  FaCheckCircle, 
+  FaExclamationTriangle, 
+  FaInfoCircle 
+} from 'react-icons/fa';
+import '../styles/AdminComponents.css';
+import '../styles/AnimatedBackground.css';
 
 const AdminUsers = () => {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,20 +44,36 @@ const AdminUsers = () => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  // Cargar usuarios
-  useEffect(() => {
-    fetchUsers();
-  }, [currentPage, searchTerm]);
-
   // Sistema de notificación personalizado
-  const showNotification = (message, type) => {
+  const showNotification = useCallback((message, type) => {
     setNotification({ show: true, message, type });
     setTimeout(() => {
       setNotification({ show: false, message: '', type: '' });
     }, 3000);
-  };
+  }, []);
 
-  const fetchUsers = async () => {
+  // Verificar sesión de administrador
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const response = await axios.get(
+          `${backendUrl}/users/UserController.php?action=session`,
+          { withCredentials: true }
+        );
+        if (response.data && response.data.rol !== 'admin') {
+          showNotification('Acceso restringido a administradores', 'error');
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('Error al verificar la sesión:', error);
+        navigate('/login');
+      }
+    };
+    
+    checkAdmin();
+  }, [navigate, backendUrl, showNotification]);
+
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -79,11 +107,16 @@ const AdminUsers = () => {
     } catch (err) {
       console.error('Error al cargar usuarios:', err);
       setError(err.message || 'Error al cargar los usuarios');
-      showNotification('No se pudieron cargar los usuarios', 'danger');
+      showNotification('No se pudieron cargar los usuarios', 'error');
     } finally {
       setLoading(false);
     }
-  };
+  }, [backendUrl, currentPage, itemsPerPage, searchTerm, showNotification]);
+
+  // Cargar usuarios
+  useEffect(() => {
+    fetchUsers();
+  }, [currentPage, fetchUsers]);
 
   // Manejar búsqueda
   const handleSearch = (e) => {
@@ -101,27 +134,27 @@ const AdminUsers = () => {
   // Guardar cambios de edición
   const handleSaveEdit = async () => {
     try {
-      const response = await fetch(`${backendUrl}/users/UserController.php?action=update&id=${editUser.id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editUser),
-      });
+      const response = await axios.post(
+        `${backendUrl}/users/UserController.php?action=update&id=${editUser.id}`,
+        editUser,
+        {
+          withCredentials: true
+        }
+      );
       
-      const data = await response.json();
+      const data = response.data;
       
       if (data.error) {
-        setNotification({ show: true, message: `Error: ${data.error}`, type: 'danger' });
+        showNotification(`Error: ${data.error}`, 'error');
       } else {
-        setNotification({ show: true, message: 'Usuario actualizado correctamente', type: 'success' });
+        showNotification('Usuario actualizado correctamente', 'success');
         fetchUsers(); // Recargar usuarios
       }
       
       setShowEditModal(false);
     } catch (err) {
       console.error('Error al guardar cambios:', err);
-      setNotification({ show: true, message: 'Error al actualizar el usuario', type: 'danger' });
+      showNotification('Error al actualizar el usuario', 'error');
     }
   };
 
@@ -136,15 +169,15 @@ const AdminUsers = () => {
     if (!userToDelete) return;
     
     try {
-      const response = await fetch(`${backendUrl}/users/UserController.php?action=delete&id=${userToDelete}`, {
-        method: 'DELETE',
-        credentials: 'include'
-      });
+      const response = await axios.delete(
+        `${backendUrl}/users/UserController.php?action=delete&id=${userToDelete}`,
+        { withCredentials: true }
+      );
       
-      const data = await response.json();
+      const data = response.data;
       
       if (data.error) {
-        showNotification(`Error: ${data.error}`, 'danger');
+        showNotification(`Error: ${data.error}`, 'error');
       } else {
         showNotification('Usuario eliminado correctamente', 'success');
         fetchUsers(); // Recargar la lista de usuarios
@@ -154,7 +187,7 @@ const AdminUsers = () => {
       setUserToDelete(null);
     } catch (err) {
       console.error('Error al eliminar usuario:', err);
-      showNotification('Error al eliminar el usuario', 'danger');
+      showNotification('Error al eliminar el usuario', 'error');
       setShowDeleteModal(false);
     }
   };
@@ -178,231 +211,320 @@ const AdminUsers = () => {
       startPage = Math.max(1, endPage - maxPagesToShow + 1);
     }
 
-    // Primera página
+    // Añadir ítem para la primera página
     items.push(
-      <Pagination.First 
-        key="first" 
-        onClick={() => handlePageChange(1)} 
-        disabled={currentPage === 1}
-      />
+      <li key="first" className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+        <button 
+          className="page-link" 
+          onClick={() => handlePageChange(1)}
+          disabled={currentPage === 1}
+        >
+          &laquo;
+        </button>
+      </li>
     );
 
-    // Página anterior
+    // Añadir ítem para la página anterior
     items.push(
-      <Pagination.Prev 
-        key="prev" 
-        onClick={() => handlePageChange(Math.max(1, currentPage - 1))} 
-        disabled={currentPage === 1}
-      />
+      <li key="prev" className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+        <button 
+          className="page-link" 
+          onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+          disabled={currentPage === 1}
+        >
+          &lt;
+        </button>
+      </li>
     );
 
     // Páginas numeradas
     for (let number = startPage; number <= endPage; number++) {
       items.push(
-        <Pagination.Item
-          key={number}
-          active={number === currentPage}
-          onClick={() => handlePageChange(number)}
-        >
-          {number}
-        </Pagination.Item>
+        <li key={number} className={`page-item ${number === currentPage ? 'active' : ''}`}>
+          <button
+            className="page-link"
+            onClick={() => handlePageChange(number)}
+          >
+            {number}
+          </button>
+        </li>
       );
     }
 
-    // Página siguiente
+    // Añadir ítem para la página siguiente
     items.push(
-      <Pagination.Next 
-        key="next" 
-        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))} 
-        disabled={currentPage === totalPages}
-      />
+      <li key="next" className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+        <button 
+          className="page-link" 
+          onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+          disabled={currentPage === totalPages}
+        >
+          &gt;
+        </button>
+      </li>
     );
 
-    // Última página
+    // Añadir ítem para la última página
     items.push(
-      <Pagination.Last 
-        key="last" 
-        onClick={() => handlePageChange(totalPages)} 
-        disabled={currentPage === totalPages}
-      />
+      <li key="last" className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+        <button 
+          className="page-link" 
+          onClick={() => handlePageChange(totalPages)}
+          disabled={currentPage === totalPages}
+        >
+          &raquo;
+        </button>
+      </li>
     );
 
-    return <Pagination className="justify-content-center mt-4">{items}</Pagination>;
+    return <ul className="cyber-pagination">{items}</ul>;
   };
 
   return (
-    <div className="admin-container container-fluid py-4">
-      <h2 className="mb-4">Administración de Usuarios</h2>
-      
-      {/* Notificación */}
-      {notification.show && (
-        <Alert 
-          variant={notification.type} 
-          className="notification-alert"
-          onClose={() => setNotification({...notification, show: false})} 
-          dismissible
-        >
-          {notification.message}
-        </Alert>
-      )}
-      
-      {/* Formulario de búsqueda */}
-      <Form onSubmit={handleSearch} className="mb-4 search-form">
-        <div className="input-group">
-          <Form.Control
-            type="text"
-            placeholder="Buscar por nombre, email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <Button variant="primary" type="submit" title="Buscar">
-            <FaSearch />
-          </Button>
-        </div>
-      </Form>
-      
-      {error && <Alert variant="danger">{error}</Alert>}
-      
-      {loading ? (
-        <div className="text-center my-5">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Cargando...</span>
-          </div>
-        </div>
-      ) : (
-        <>
-          {users.length === 0 ? (
-            <Alert variant="info">No se encontraron usuarios</Alert>
-          ) : (
-            <div className="table-responsive">
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Fecha de registro</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((user) => (
-                    <tr key={user.id}>
-                      <td>{user.id}</td>
-                      <td>{user.nombre}</td>
-                      <td>{user.apellidos}</td>
-                      <td>{user.email}</td>
-                      <td>{user.rol}</td>
-                      <td>{new Date(user.fecha_registro).toLocaleDateString()}</td>
-                      <td>
-                        <Button
-                          variant="warning"
-                          size="sm"
-                          className="me-1"
-                          onClick={() => handleEditClick(user)}
-                          title="Editar"
-                        >
-                          <FaEdit />
-                        </Button>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => handleDeleteClick(user.id)}
-                          title="Eliminar"
-                        >
-                          <FaTrash />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
+    <>
+      <AdminHeader />
+      {/* Nuevo fondo animado futurista */}
+      <div className="cyber-background">
+                {/* Partículas */}
+                <div className="particles-container">
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                    <div className="particle"></div>
+                </div>
+                
+                {/* Efecto de cuadrícula */}
+                <div className="grid-container"></div>
+                
+                {/* Formas geométricas */}
+                <div className="cyber-shape hexagon shape-1"></div>
+                <div className="cyber-shape triangle shape-2"></div>
+                <div className="cyber-shape circle shape-3"></div>
+                <div className="cyber-shape rectangle shape-4"></div>
+                
+                {/* Líneas digitales */}
+                <div className="digital-lines">
+                    <div className="h-line"></div>
+                    <div className="h-line"></div>
+                    <div className="h-line"></div>
+                    <div className="v-line"></div>
+                    <div className="v-line"></div>
+                </div>
             </div>
-          )}
-          
-          {/* Paginación */}
-          {totalPages > 1 && renderPagination()}
-        </>
-      )}
+            
+            {/* Elementos flotantes decorativos */}
+            <div className="profile-floating-elements">
+                <div className="profile-floating-element profile-element-1"></div>
+                <div className="profile-floating-element profile-element-2"></div>
+                <div className="profile-floating-element profile-element-3"></div>
+            </div>
       
-      {/* Modal de edición */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)} centered size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Editar Usuario</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control
-                type="text"
-                value={editUser.nombre || ''}
-                onChange={(e) => setEditUser({...editUser, nombre: e.target.value})}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Apellidos</Form.Label>
-              <Form.Control
-                type="text"
-                value={editUser.apellidos || ''}
-                onChange={(e) => setEditUser({...editUser, apellidos: e.target.value})}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                value={editUser.email || ''}
-                onChange={(e) => setEditUser({...editUser, email: e.target.value})}
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Rol</Form.Label>
-              <Form.Select
-                value={editUser.rol || ''}
-                onChange={(e) => setEditUser({...editUser, rol: e.target.value})}
-                required
-              >
-                <option value="">Seleccionar rol</option>
-                <option value="usuario">Usuario</option>
-                <option value="admin">Administrador</option>
-              </Form.Select>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Cancelar
-          </Button>
-          <Button variant="primary" onClick={handleSaveEdit}>
-            Guardar Cambios
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      
-      {/* Modal de confirmación de eliminación */}
-      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirmar Eliminación</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          ¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
-            Cancelar
-          </Button>
-          <Button variant="danger" onClick={handleConfirmDelete}>
-            Eliminar
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+      <div className="admin-container">
+        <div className="admin-header">
+          <h1 className="admin-title">Administración de Usuarios</h1>
+          <p className="admin-subtitle">Gestión y configuración de cuentas de usuarios en la plataforma</p>
+        </div>
+        
+        {/* Notificación */}
+        {notification.show && (
+          <div className={`cyber-notification ${notification.type}`}>
+            {notification.type === 'success' && <FaCheckCircle />}
+            {notification.type === 'error' && <FaTimes />}
+            {notification.type === 'warning' && <FaExclamationTriangle />}
+            {notification.type === 'info' && <FaInfoCircle />}
+            <span>{notification.message}</span>
+          </div>
+        )}
+        
+        {/* Formulario de búsqueda */}
+        <form onSubmit={handleSearch} className="search-form">
+          <div className="cyber-search-container">
+            <input
+              type="text"
+              className="cyber-search-input"
+              placeholder="Buscar por nombre, email o rol..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button type="submit" className="cyber-search-button">
+              <FaSearch /> Buscar
+            </button>
+          </div>
+        </form>
+        
+        {/* Mostrar error o contenido */}
+        {loading ? (
+          <div className="cyber-loading">
+            <div className="cyber-spinner"></div>
+            <p>Cargando usuarios...</p>
+          </div>
+        ) : error ? (
+          <div className="cyber-error">
+            <FaTimes />
+            <p>{error}</p>
+          </div>
+        ) : (
+          <>
+            {users.length === 0 ? (
+              <div className="cyber-empty-state">
+                <FaUsers className="icon" />
+                <h3>No se encontraron usuarios</h3>
+                <p>Intenta realizar una nueva búsqueda o añade usuarios nuevos</p>
+              </div>
+            ) : (
+              <div className="cyber-table-container">
+                <table className="cyber-table">
+                  <thead>
+                    <tr>
+                      <th className="id-column">ID</th>
+                      <th>Email</th>
+                      <th>Rol</th>
+                      <th>Fecha Registro</th>
+                      <th className="actions-column">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {users.map((user) => (
+                      <tr key={user.id}>
+                        <td className="id-column">{user.id}</td>
+                        <td>{user.email}</td>
+                        <td>
+                          <span className={`cyber-badge ${user.rol === 'admin' ? 'admin' : 'user'}`}>
+                            {user.rol}
+                          </span>
+                        </td>
+                        <td>{new Date(user.fecha_registro).toLocaleDateString()}</td>
+                        <td className="actions-column">
+                          <button
+                            className="cyber-button-small edit"
+                            onClick={() => handleEditClick(user)}
+                            title="Editar"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            className="cyber-button-small delete"
+                            onClick={() => handleDeleteClick(user.id)}
+                            title="Eliminar"
+                          >
+                            <FaTrash />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            
+            {/* Paginación */}
+            {totalPages > 1 && (
+              <div className="cyber-pagination-container">
+                {renderPagination()}
+              </div>
+            )}
+          </>
+        )}
+        
+        {/* Modal de edición */}
+        {showEditModal && (
+          <div className="cyber-modal-backdrop">
+            <div className="cyber-modal">
+              <div className="cyber-modal-header">
+                <h2>Editar Usuario</h2>
+                <button className="cyber-modal-close" onClick={() => setShowEditModal(false)}>
+                  <FaTimes />
+                </button>
+              </div>
+              <div className="cyber-modal-body flex flex-col justify-center items-center">
+                
+              <div className="cyber-form-group flex flex-col">
+                  <label className='m-auto'>User</label>
+                  <input
+                    type="user"
+                    className="cyber-input border rounded p-1 border-white/40 m-3"
+                    value={editUser.user || ''}
+                    onChange={(e) => setEditUser({...editUser, email: e.target.value})}
+                    required
+                  />
+                </div>
+                <div className="cyber-form-group flex flex-col">
+                  <label className='m-auto'>Email</label>
+                  <input
+                    type="email"
+                    className="cyber-input border rounded p-1 border-white/40 m-3"
+                    value={editUser.email || ''}
+                    onChange={(e) => setEditUser({...editUser, email: e.target.value})}
+                    required
+                  />
+                </div>
+                <div className="cyber-form-group flex flex-col">
+                  <label className='m-auto'>Rol</label>
+                  <select
+                    className="cyber-select border rounded p-1 border-white/40 m-3"
+                    value={editUser.rol || ''}
+                    onChange={(e) => setEditUser({...editUser, rol: e.target.value})}
+                    required
+                  >
+                    <option className='text-black' value="">Seleccionar rol</option>
+                    <option className='text-black' value="desarrollador">Desarrollador</option>
+                    <option className='text-black' value="admin">Administrador</option>
+                  </select>
+                </div>
+              </div>
+              <div className="cyber-modal-footer">
+                <button 
+                  className="cyber-button secondary" 
+                  onClick={() => setShowEditModal(false)}
+                >
+                  Cancelar
+                </button>
+                <button 
+                  className="cyber-button primary" 
+                  onClick={handleSaveEdit}
+                >
+                  Guardar Cambios
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Modal de confirmación de eliminación */}
+        {showDeleteModal && (
+          <div className="cyber-modal-backdrop">
+            <div className="cyber-modal">
+              <div className="cyber-modal-header">
+                <h2>Confirmar Eliminación</h2>
+                <button className="cyber-modal-close" onClick={() => setShowDeleteModal(false)}>
+                  <FaTimes />
+                </button>
+              </div>
+              <div className="cyber-modal-body">
+                <p>¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.</p>
+              </div>
+              <div className="cyber-modal-footer">
+                <button 
+                  className="cyber-button secondary" 
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  Cancelar
+                </button>
+                <button 
+                  className="cyber-button danger" 
+                  onClick={handleConfirmDelete}
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

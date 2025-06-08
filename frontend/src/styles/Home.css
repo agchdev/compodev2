@@ -1,6 +1,102 @@
 /* Home.css - Modern Web3-inspired dark theme for CompoDev platform */
 /* Created by Alejandro Aguayo */
 
+/* Sliding Banner Effect */
+.sliding-banner-container {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(10, 17, 32, 0.9) 0%, rgba(23, 43, 77, 0.9) 50%, rgba(10, 17, 32, 0.9) 100%);
+  position: relative;
+  border-top: 1px solid rgba(21, 191, 253, 0.2);
+  border-bottom: 1px solid rgba(21, 191, 253, 0.2);
+  height: 70px;
+  display: flex;
+  align-items: center;
+  margin-top: 70px; /* Space for header */
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  z-index: 10;
+}
+
+.sliding-banner {
+  width: 100%;
+  overflow: hidden;
+  transform: rotateX(7deg);
+}
+
+.banner-content {
+  display: flex;
+  white-space: nowrap;
+  animation: slide 40s linear infinite;
+  will-change: transform;
+}
+
+@keyframes glow {
+  0%, 100% { text-shadow: 0 0 10px rgba(21, 191, 253, 0.7); }
+  50% { text-shadow: 0 0 20px rgba(21, 191, 253, 0.9), 0 0 30px rgba(21, 191, 253, 0.5); }
+}
+
+.banner-item {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 45px;
+}
+
+.banner-text {
+  color: #15BFFD;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-right: 10px;
+  text-shadow: 0 0 15px rgba(21, 191, 253, 0.6);
+  animation: glow 3s ease-in-out infinite;
+}
+
+.banner-separator {
+  display: inline-flex;
+  align-items: center;
+  color: #15BFFD;
+  margin: 0 15px;
+}
+
+.banner-separator svg {
+  width: 18px;
+  height: 18px;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 5px rgba(21, 191, 253, 0.6));
+}
+
+/* Add a gradient overlay to enhance the 3D effect */
+.sliding-banner-container::before,
+.sliding-banner-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 200px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.sliding-banner-container::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(10, 17, 32, 1), rgba(10, 17, 32, 0));
+}
+
+.sliding-banner-container::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(10, 17, 32, 1), rgba(10, 17, 32, 0));
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .home-container {
   color: #e0e0e0;
   background-color: #121212;
@@ -331,6 +427,161 @@
 .view-more {
   text-align: center;
   margin-top: 2rem;
+}
+
+/* Usuarios Showcase - Web3 Futuristic Style */
+.users-showcase-section {
+  padding: 5rem 2rem;
+  position: relative;
+  overflow: hidden;
+  background-color: #0c0c14;
+}
+
+.users-showcase-section h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #fff, #5d4fff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  width: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.users-showcase-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #5d4fff, transparent);
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.user-card {
+  background: rgba(22, 25, 37, 0.7);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(93, 79, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.user-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  height: 3px;
+  background: linear-gradient(90deg, #5d4fff, #ff4f9b);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(93, 79, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(93, 79, 255, 0.2);
+}
+
+.user-card:hover::before {
+  transform: scaleX(1);
+}
+
+.user-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5d4fff, #ff4f9b);
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+  font-weight: 700;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  box-shadow: 0 5px 15px rgba(93, 79, 255, 0.3);
+}
+
+.user-avatar::after {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+
+.user-info h3 {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
+}
+
+.user-stats {
+  color: #15BFFD;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.loading-users {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  grid-column: 1 / -1;
+}
+
+.cyber-spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid transparent;
+  border-top-color: #5d4fff;
+  border-left-color: #ff4f9b;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Stats Section */

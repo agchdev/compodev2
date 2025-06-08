@@ -31,7 +31,7 @@ const Subscription = () => {
         
             // Si el usuario ya está verificado, redirigir al perfil
         if (response.data.verificado === 1) {
-          navigate('/profile');
+          navigate('/perfil');
         }
 
         // Si no tiene ID, redirigir al login

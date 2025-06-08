@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import '../styles/Home.css'
+import SlidingBanner from '../components/SlidingBanner';
 
 const Home = () => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL
   const [user, setUser] = useState(null)
+  const [users, setUsers] = useState([])
+  const [loadingUsers, setLoadingUsers] = useState(true)
   const featuredComponents = [
     {
       id: 1,
@@ -33,6 +36,33 @@ const Home = () => {
     }
   ]
  
+  // Obtener usuarios
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoadingUsers(true);
+        const response = await axios.get(
+          `${backendUrl}/users/UserController.php?action=top_users&limit=8`,
+          { withCredentials: true }
+        );
+        
+        if (response.data && Array.isArray(response.data.users)) {
+          setUsers(response.data.users);
+        } else {
+          console.error('Formato de respuesta inesperado:', response.data);
+          setUsers([]);
+        }
+      } catch (error) {
+        console.error('Error al cargar usuarios:', error);
+        setUsers([]);
+      } finally {
+        setLoadingUsers(false);
+      }
+    };
+
+    fetchUsers();
+  }, [backendUrl]);
+
   useEffect(() => {
     const getSession = async () => {
       try {
@@ -65,6 +95,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
+
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
@@ -99,6 +130,9 @@ const Home = () => {
           <span>Cards</span>
         </div>
       </section>
+      
+      {/* Sliding Banner between main sections */}
+      <SlidingBanner text="COMPODEV" />
 
       {/* Services Section */}
       <section className="services-section">
@@ -155,6 +189,32 @@ const Home = () => {
         </div>
         <div className="view-more">
           <Link to="/Search" className="btn btn-outline">Ver más componentes</Link>
+        </div>
+      </section>
+
+      {/* Algunos usuarios - Estilo futurista Web3 */}
+      <section className="users-showcase-section">
+        <h2>Algunos Usuarios</h2>
+        <div className="users-grid">
+          {loadingUsers ? (
+            <div className="loading-users">
+              <div className="cyber-spinner"></div>
+              <p>Cargando usuarios...</p>
+            </div>
+          ) : (
+            users.map((user) => (
+              <div key={user.id} className="user-card">
+                <div className="user-avatar">
+                  {/* Mostrar inicial del correo o usar imagen de usuario si está disponible */}
+                  {user.email && user.email.charAt(0).toUpperCase()}
+                </div>
+                <div className="user-info">
+                  <h3>{user.email ? user.email.split('@')[0] : 'Usuario'}</h3>
+                  <p className="user-stats">{user.proyectos || 0} Proyectos</p>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </section>
 

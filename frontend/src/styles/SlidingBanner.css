@@ -1,0 +1,104 @@
+/* SlidingBanner.css - Banner deslizante con efecto 3D para CompoDev */
+
+.sliding-banner-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 2rem 0;
+  z-index: 10;
+  transform: skewY(-1.5deg); /* Inclinación sutil como en la imagen */
+}
+
+.sliding-banner-container {
+  width: 100%;
+  overflow: hidden;
+  background: #150735;
+  position: relative;
+  border-top: 1px solid rgba(93, 79, 255, 0.2);
+  border-bottom: 1px solid rgba(93, 79, 255, 0.2);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  box-shadow: 
+    0 10px 30px -5px rgba(0, 0, 0, 0.3),
+    0 -5px 20px -5px rgba(0, 0, 0, 0.2);
+}
+
+.sliding-banner {
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner-content {
+  display: flex;
+  white-space: nowrap;
+  animation: slide 40s linear infinite;
+  will-change: transform;
+}
+
+
+
+.banner-item {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 55px;
+  position: relative;
+}
+
+.banner-text {
+  color: #a79dff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-right: 10px;
+  text-shadow: 0 0 15px rgba(148, 134, 255, 0.9);
+  position: relative;
+  z-index: 2;
+}
+
+.banner-separator {
+  display: inline-flex;
+  align-items: center;
+  color: #a79dff;
+  margin: 0 15px;
+  position: relative;
+  left: -5px;
+}
+
+.banner-separator svg {
+  width: 16px;
+  height: 16px;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 10px rgba(148, 134, 255, 1));
+}
+
+/* Add a gradient overlay to enhance the 3D effect */
+.sliding-banner-container::before,
+.sliding-banner-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 200px;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.sliding-banner-container::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(31, 11, 76, 1), rgba(31, 11, 76, 0));
+}
+
+.sliding-banner-container::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(31, 11, 76, 1), rgba(31, 11, 76, 0));
+}
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+

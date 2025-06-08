@@ -1,0 +1,556 @@
+/* AdminComponents.css - Estilos compartidos para los componentes administrativos con estética futurista Web3 */
+
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: #e0e6fd;
+    position: relative;
+    z-index: 10;
+    min-height: calc(100vh - 80px);
+    font-family: 'Roboto', sans-serif;
+}
+
+.admin-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.admin-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(120, 70, 255, 0.7), 0 0 20px rgba(120, 70, 255, 0.5);
+    letter-spacing: 1px;
+}
+
+.admin-subtitle {
+    font-size: 1.2rem;
+    color: #a0a7dd;
+    margin-bottom: 2rem;
+}
+
+/* Tabla futurista */
+.admin-table-container {
+    background: rgba(15, 23, 42, 0.7);
+    border-radius: 12px;
+    padding: 1rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(149, 128, 255, 0.2);
+    border: 1px solid rgba(149, 128, 255, 0.3);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.admin-table-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #7846ff, #50c5ff);
+    z-index: 1;
+}
+
+.cyber-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: #e0e6fd;
+}
+
+.cyber-table thead {
+    background: rgba(25, 33, 52, 0.8);
+}
+
+.cyber-table th {
+    padding: 1rem 0.8rem;
+    text-align: left;
+    font-weight: 600;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(149, 128, 255, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+    vertical-align: middle;
+}
+
+.cyber-table tbody tr {
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(149, 128, 255, 0.1);
+}
+
+.cyber-table tbody tr:hover {
+    background: rgba(149, 128, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.cyber-table td {
+    padding: 1rem 0.8rem;
+    vertical-align: middle;
+}
+
+.cyber-table .id-column {
+    width: 60px;
+    text-align: center;
+}
+
+.cyber-table .actions-column {
+    width: 120px;
+    text-align: center;
+}
+
+.cyber-table .description-column {
+    max-width: 300px;
+}
+
+/* Botones de acción */
+.action-button {
+    background: transparent;
+    border: 1px solid;
+    border-radius: 4px;
+    padding: 0.4rem;
+    margin: 0 0.2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-button {
+    color: #ffcc00;
+    border-color: #ffcc00;
+}
+
+.edit-button:hover {
+    background: rgba(255, 204, 0, 0.2);
+    box-shadow: 0 0 8px rgba(255, 204, 0, 0.5);
+}
+
+.delete-button {
+    color: #ff4a4a;
+    border-color: #ff4a4a;
+}
+
+.delete-button:hover {
+    background: rgba(255, 74, 74, 0.2);
+    box-shadow: 0 0 8px rgba(255, 74, 74, 0.5);
+}
+
+/* Formulario de búsqueda */
+.search-form {
+    display: flex;
+    margin-bottom: 1.5rem;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 8px;
+    padding: 0.8rem;
+    border: 1px solid rgba(149, 128, 255, 0.3);
+}
+
+.search-input {
+    flex: 1;
+    background: rgba(25, 33, 52, 0.7);
+    border: 1px solid rgba(149, 128, 255, 0.3);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    color: #ffffff;
+    margin-right: 0.8rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #7846ff;
+    box-shadow: 0 0 0 2px rgba(120, 70, 255, 0.3);
+}
+
+.search-button {
+    background: linear-gradient(135deg, #7846ff, #5e3fd8);
+    border: none;
+    border-radius: 6px;
+    padding: 0 1.5rem;
+    color: #ffffff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-button:hover {
+    background: linear-gradient(135deg, #8656ff, #6e4fe8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(120, 70, 255, 0.4);
+}
+
+.search-button:active {
+    transform: translateY(0);
+}
+
+.search-button svg {
+    font-size: 1rem;
+}
+
+/* Paginación */
+.cyber-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.page-item {
+    list-style: none;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(25, 33, 52, 0.7);
+    border: 1px solid rgba(149, 128, 255, 0.3);
+    border-radius: 6px;
+    color: #e0e6fd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-link:hover:not(.active) {
+    border-color: #7846ff;
+    background: rgba(120, 70, 255, 0.2);
+}
+
+.page-link.active {
+    background: linear-gradient(135deg, #7846ff, #5e3fd8);
+    border-color: #7846ff;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(120, 70, 255, 0.5);
+}
+
+/* Modales */
+.cyber-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 15, 30, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1040;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cyber-modal {
+    background: rgba(15, 23, 42, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgba(149, 128, 255, 0.3);
+    border: 1px solid rgba(149, 128, 255, 0.3);
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    padding: 0;
+    z-index: 1050;
+    overflow: hidden;
+}
+
+.cyber-modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #7846ff, #50c5ff);
+}
+
+.cyber-modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(149, 128, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cyber-modal-title {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.cyber-modal-close {
+    background: transparent;
+    border: none;
+    color: #a0a7dd;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.3rem;
+    line-height: 1;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.cyber-modal-close:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.cyber-modal-body {
+    padding: 1.5rem;
+}
+
+.cyber-modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid rgba(149, 128, 255, 0.3);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Formularios dentro de modales */
+.cyber-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.cyber-form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #a0a7dd;
+    font-weight: 500;
+}
+
+.cyber-form-control {
+    width: 100%;
+    background: rgba(25, 33, 52, 0.7);
+    border: 1px solid rgba(149, 128, 255, 0.3);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.cyber-form-control:focus {
+    border-color: #7846ff;
+    box-shadow: 0 0 0 2px rgba(120, 70, 255, 0.3);
+    outline: none;
+}
+
+.cyber-form-select {
+    width: 100%;
+    background: rgba(25, 33, 52, 0.7);
+    border: 1px solid rgba(149, 128, 255, 0.3);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    color: #ffffff;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a0a7dd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.8rem center;
+    background-size: 16px 12px;
+    transition: all 0.3s ease;
+}
+
+.cyber-form-select:focus {
+    border-color: #7846ff;
+    box-shadow: 0 0 0 2px rgba(120, 70, 255, 0.3);
+    outline: none;
+}
+
+/* Botones principales */
+.cyber-button {
+    padding: 0.8rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cyber-button-primary {
+    background: linear-gradient(135deg, #7846ff, #5e3fd8);
+    color: #ffffff;
+}
+
+.cyber-button-primary:hover {
+    background: linear-gradient(135deg, #8656ff, #6e4fe8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(120, 70, 255, 0.4);
+}
+
+.cyber-button-secondary {
+    background: rgba(25, 33, 52, 0.7);
+    border: 1px solid rgba(149, 128, 255, 0.3);
+    color: #a0a7dd;
+}
+
+.cyber-button-secondary:hover {
+    background: rgba(25, 33, 52, 0.9);
+    color: #ffffff;
+    border-color: #a0a7dd;
+}
+
+.cyber-button-danger {
+    background: linear-gradient(135deg, #ff4a4a, #d03333);
+    color: #ffffff;
+}
+
+.cyber-button-danger:hover {
+    background: linear-gradient(135deg, #ff5a5a, #e04444);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(255, 74, 74, 0.4);
+}
+
+/* Notificaciones */
+.cyber-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(10px);
+    border-left: 4px solid;
+    color: #ffffff;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: slideInRight 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 300px;
+}
+
+.cyber-notification.success {
+    border-left-color: #10b981;
+}
+
+.cyber-notification.error {
+    border-left-color: #ef4444;
+}
+
+.cyber-notification.warning {
+    border-left-color: #f59e0b;
+}
+
+.cyber-notification.info {
+    border-left-color: #3b82f6;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Estados de carga */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    flex-direction: column;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 3px solid rgba(149, 128, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #7846ff;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+.loading-text {
+    color: #a0a7dd;
+    font-size: 1.1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Estados vacíos */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #a0a7dd;
+}
+
+.empty-state-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: rgba(149, 128, 255, 0.5);
+}
+
+.empty-state-text {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-subtext {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 1rem;
+    }
+    
+    .admin-title {
+        font-size: 2rem;
+    }
+    
+    .admin-subtitle {
+        font-size: 1rem;
+    }
+    
+    .cyber-table {
+        font-size: 0.8rem;
+    }
+    
+    .cyber-table th,
+    .cyber-table td {
+        padding: 0.8rem 0.5rem;
+    }
+    
+    .cyber-table .description-column {
+        max-width: 200px;
+    }
+    
+    .action-button {
+        padding: 0.3rem;
+        margin: 0.1rem;
+    }
+    
+    .cyber-modal {
+        width: 95%;
+    }
+    
+    .cyber-pagination {
+        flex-wrap: wrap;
+    }
+}

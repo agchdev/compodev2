@@ -15,6 +15,7 @@ require_once __DIR__ . '/use_cases/GetUserById.php';
 require_once __DIR__ . '/use_cases/UpdateUser.php';
 require_once __DIR__ . '/use_cases/DeleteUser.php';
 require_once __DIR__ . '/use_cases/VerifyUser.php';
+require_once __DIR__ . '/use_cases/GetTopUsers.php';
 
 // Obtener método HTTP
 $method = $_SERVER['REQUEST_METHOD'];
@@ -323,6 +324,20 @@ switch ($action) {
             
             // Devolver la respuesta
             echo json_encode($result);
+        } else {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'error' => 'Método no permitido']);
+        }
+        break;
+        
+    case 'top_users':
+        if ($method === 'GET') {
+            // Obtener el límite de usuarios a devolver
+            $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 8;
+            
+            // Ejecutar el caso de uso
+            $useCase = new GetTopUsers();
+            $useCase->execute($limit);
         } else {
             http_response_code(405);
             echo json_encode(['success' => false, 'error' => 'Método no permitido']);

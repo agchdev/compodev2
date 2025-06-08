@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import '../styles/ProfileEdit.css';
+import '../styles/AnimatedBackground.css';
 
 const ProfileEdit = () => {
 
@@ -162,89 +164,164 @@ const ProfileEdit = () => {
   };
 
   return (
-    <section>
-      {user ? (
-        
-      <form onSubmit={handleSubmit}>
-        {error && <p className="error-message">{error}</p>}
-        
-        <div>
-          {urlFoto && (
-            <img 
-              src={urlFoto} 
-              alt="Foto de perfil" 
-              style={{ width: '150px', height: '150px', objectFit: 'cover', marginBottom: '10px' }} 
-            />
-          )}
-          <label htmlFor="urlFoto">Actualizar foto de perfil</label>
-          <input type="file" name="urlFoto" onChange={handleFotoSeleccionada} accept="image/*" />
+    <div className="profile-edit-container">
+      {/* Nuevo fondo animado futurista */}
+      <div className="cyber-background">
+        {/* Partículas */}
+        <div className="particles-container">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
         </div>
         
-        <div>
-          <label htmlFor="user">Nombre de usuario</label>
-          <input 
-            type="text" 
-            name="user" 
-            id="user"
-            value={formData.user} 
-            onChange={handleChange} 
-            required
-          />
-        </div>
+        {/* Efecto de cuadrícula */}
+        <div className="grid-container"></div>
         
-        <div>
-          <label htmlFor="email">Email</label>
-          <input 
-            type="email" 
-            name="email" 
-            id="email"
-            value={formData.email} 
-            onChange={handleChange} 
-            required
-          />
-        </div>
+        {/* Formas geométricas */}
+        <div className="cyber-shape hexagon shape-1"></div>
+        <div className="cyber-shape triangle shape-2"></div>
+        <div className="cyber-shape circle shape-3"></div>
+        <div className="cyber-shape rectangle shape-4"></div>
         
-        <div>
-          <label htmlFor="descripcion">Descripción</label>
-          <textarea
-            name="descripcion" 
-            id="descripcion"
-            value={formData.descripcion} 
-            onChange={handleChange} 
-            rows="3"
-          />
+        {/* Líneas digitales */}
+        <div className="digital-lines">
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="v-line"></div>
+          <div className="v-line"></div>
         </div>
-        
-        <div>
-          <h3>Cambiar contraseña (opcional)</h3>
-          <label htmlFor="password">Nueva contraseña</label>
-          <input 
-            type="password" 
-            name="password" 
-            id="password"
-            value={formData.password} 
-            onChange={handleChange} 
-          />
+      </div>
+      
+      {loading && !user ? (
+        <div className="loading-container">
+          <div className="loader"></div>
+        </div>
+      ) : user ? (
+        <div className="profile-edit-card mt-20">
+          <h2 className="profile-edit-title">Editar Perfil</h2>
           
-          <label htmlFor="confirmPassword">Confirmar nueva contraseña</label>
-          <input 
-            type="password" 
-            name="confirmPassword" 
-            id="confirmPassword"
-            value={formData.confirmPassword} 
-            onChange={handleChange} 
-          />
-          <small>Deja en blanco para mantener la contraseña actual</small>
+          {error && <div className="error-message">{error}</div>}
+          
+          <form onSubmit={handleSubmit}>
+            <div className="profile-image-preview">
+              <div className="profile-image-container">
+                <img 
+                  src={urlFoto || "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.user) + "&background=5d4fff&color=fff&size=200"} 
+                  alt={`Foto de perfil de ${formData.user}`} 
+                  className="profile-image"
+                />
+              </div>
+              
+              <div className="file-upload-container">
+                <label className="file-upload-btn">
+                  Actualizar foto
+                  <input 
+                    type="file" 
+                    name="urlFoto" 
+                    className="file-upload-input"
+                    onChange={handleFotoSeleccionada} 
+                    accept="image/*" 
+                  />
+                </label>
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="user">Nombre de usuario</label>
+              <input 
+                type="text" 
+                name="user" 
+                id="user"
+                value={formData.user} 
+                onChange={handleChange} 
+                required
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input 
+                type="email" 
+                name="email" 
+                id="email"
+                value={formData.email} 
+                onChange={handleChange} 
+                required
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="descripcion">Descripción</label>
+              <textarea
+                name="descripcion" 
+                id="descripcion"
+                value={formData.descripcion} 
+                onChange={handleChange} 
+                rows="4"
+                placeholder="Cuéntanos un poco sobre ti..."
+              />
+            </div>
+            
+            <div className="password-section">
+              <h3 className="password-title">Cambiar contraseña (opcional)</h3>
+              
+              <div className="form-group">
+                <label htmlFor="password">Nueva contraseña</label>
+                <input 
+                  type="password" 
+                  name="password" 
+                  id="password"
+                  value={formData.password} 
+                  onChange={handleChange} 
+                  placeholder="********"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirmar nueva contraseña</label>
+                <input 
+                  type="password" 
+                  name="confirmPassword" 
+                  id="confirmPassword"
+                  value={formData.confirmPassword} 
+                  onChange={handleChange} 
+                  placeholder="********"
+                />
+                <small>Deja en blanco para mantener la contraseña actual</small>
+              </div>
+            </div>
+            
+            <div className="form-actions">
+              <button type="submit" className="submit-button" disabled={loading}>
+                {loading ? (
+                  <>
+                    <span className="loading-spinner"></span>
+                    Actualizando perfil...
+                  </>
+                ) : (
+                  'Guardar cambios'
+                )}
+              </button>
+              
+              <Link to="/perfil" className="back-link" style={{ display: 'block', textAlign: 'center', marginTop: '1rem', color: '#8c7dff', textDecoration: 'none' }}>
+                Volver al perfil
+              </Link>
+            </div>
+          </form>
         </div>
-        
-        <button type="submit" disabled={loading}>
-          {loading ? 'Actualizando perfil...' : 'Guardar cambios'}
-        </button>
-      </form>
-      ):(
-        <p>Cargando datos del perfil...</p>
+      ) : (
+        <div className="error-container">
+          <p>Error al cargar los datos del perfil. Por favor, inicia sesión nuevamente.</p>
+          <Link to="/login" className="submit-button" style={{ display: 'inline-block', textDecoration: 'none', textAlign: 'center' }}>Ir a Login</Link>
+        </div>
       )}
-    </section>
+      
+    </div>
   )
 }
 
