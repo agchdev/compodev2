@@ -46,7 +46,7 @@ class GetAllUsers {
             $totalUsers = $totalRow['total'];
             
             // Consulta sin búsqueda
-            $sql = "SELECT id, user, email, urlFoto, descripcion FROM usuarios ORDER BY id DESC LIMIT ? OFFSET ?";
+            $sql = "SELECT id, user, email, urlFoto, descripcion, rol FROM usuarios ORDER BY id DESC LIMIT ? OFFSET ?";
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
                 http_response_code(500);

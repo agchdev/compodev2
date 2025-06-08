@@ -6,6 +6,8 @@ import { javascript } from '@codemirror/lang-javascript';
 import './CodeProject.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { FaSave, FaCode, FaHtml5, FaCss3Alt, FaJs } from 'react-icons/fa';
+import '../styles/AnimatedBackground.css';
 
 const CodeProject = () => {
   const [htmlCode, setHtmlCode] = useState('<!-- Escribe tu HTML aquí -->\n<div class="container">\n  <h1>Hello CompoDev!</h1>\n  <p>Edita este HTML y verás los cambios en tiempo real</p>\n</div>');
@@ -34,7 +36,7 @@ const CodeProject = () => {
     }
     
     getSession()
-  }, [backendUrl])
+  }, [backendUrl, idParam.id])
 
   useEffect(() => {
     if(!user) return
@@ -55,7 +57,7 @@ const CodeProject = () => {
     }
 
     checkOwner();
-  }, [user])
+  }, [user, backendUrl, idParam.id])
   
 
   const handleSave = async () => {
@@ -101,62 +103,120 @@ const CodeProject = () => {
   }, [htmlCode, cssCode, jsCode]);
 
   return (
-    <div className="code-project-container">
-      <h2 className="project-title">CompoDev - Editor de Código</h2>
-      
-      <div className="editors-container">
-        <div className="editors">
-          <div className="editor">
-            <div className="editor-header">HTML</div>
-            <CodeMirror
-              value={htmlCode}
-              height="300px"
-              extensions={[html()]}
-              onChange={(value) => setHtmlCode(value)}
-              className="code-editor"
-              theme="dark"
-            />
-          </div>
-          
-          <div className="editor">
-            <div className="editor-header">CSS</div>
-            <CodeMirror
-              value={cssCode}
-              height="300px"
-              extensions={[css()]}
-              onChange={(value) => setCssCode(value)}
-              className="code-editor"
-              theme="dark"
-            />
-          </div>
-          
-          <div className="editor">
-            <div className="editor-header">JavaScript</div>
-            <CodeMirror
-              value={jsCode}
-              height="300px"
-              extensions={[javascript()]}
-              onChange={(value) => setJsCode(value)}
-              className="code-editor"
-              theme="dark"
-            />
-          </div>
+    <>
+      {/* Fondo animado futurista */}
+      <div className="cyber-background">
+        {/* Partículas */}
+        <div className="particles-container">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
         </div>
         
-        <div className="preview-container">
-          <div className="editor-header">Vista previa</div>
-          <iframe
-            title="preview"
-            className="preview"
-            srcDoc={combinedCode}
-            sandbox="allow-scripts"
-          />
+        {/* Efecto de cuadrícula */}
+        <div className="grid-container"></div>
+        
+        {/* Formas geométricas */}
+        <div className="cyber-shape hexagon shape-1"></div>
+        <div className="cyber-shape triangle shape-2"></div>
+        <div className="cyber-shape circle shape-3"></div>
+        <div className="cyber-shape rectangle shape-4"></div>
+        
+        {/* Líneas digitales */}
+        <div className="digital-lines">
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="v-line"></div>
+          <div className="v-line"></div>
         </div>
-        {owner && (
-          <button onClick={handleSave}>Guardar</button>
-        )}
       </div>
-    </div>
+      
+      {/* Elementos flotantes decorativos */}
+      <div className="profile-floating-elements">
+        <div className="profile-floating-element profile-element-1"></div>
+        <div className="profile-floating-element profile-element-2"></div>
+        <div className="profile-floating-element profile-element-3"></div>
+      </div>
+      
+      <div className="code-project-container">
+        <div className="project-header">
+          <h2 className="project-title">CompoDev - Editor de Código</h2>
+          <p className="project-subtitle">Edita HTML, CSS y JavaScript en tiempo real</p>
+        </div>
+        
+        <div className="editors-container justify-center items-center">
+          <div className="editors">
+            <div className="editor cyber-editor">
+              <div className="editor-header">
+                <FaHtml5 className="me-2" /> HTML
+              </div>
+              <CodeMirror
+                value={htmlCode}
+                height="300px"
+                extensions={[html()]}
+                onChange={(value) => setHtmlCode(value)}
+                className="code-editor"
+                theme="dark"
+              />
+            </div>
+            
+            <div className="editor cyber-editor">
+              <div className="editor-header">
+                <FaCss3Alt className="me-2" /> CSS
+              </div>
+              <CodeMirror
+                value={cssCode}
+                height="300px"
+                extensions={[css()]}
+                onChange={(value) => setCssCode(value)}
+                className="code-editor"
+                theme="dark"
+              />
+            </div>
+            
+            <div className="editor cyber-editor">
+              <div className="editor-header">
+                <FaJs className="me-2" /> JavaScript
+              </div>
+              <CodeMirror
+                value={jsCode}
+                height="300px"
+                extensions={[javascript()]}
+                onChange={(value) => setJsCode(value)}
+                className="code-editor"
+                theme="dark"
+              />
+            </div>
+          </div>
+          
+          <div className="preview-container cyber-preview">
+            <div className="editor-header ">
+              <FaCode className="me-2 " /> Vista previa
+            </div>
+            <iframe
+              title="preview"
+              className="preview "
+              srcDoc={combinedCode}
+              sandbox="allow-scripts"
+            />
+          </div>
+          
+          
+        </div>
+      </div>
+      {owner && (
+            <div className="save-container mb-20">
+              <button onClick={handleSave} className="cyber-button primary save-button">
+                <FaSave className="me-2" /> Guardar Proyecto
+              </button>
+            </div>
+          )}
+    </>
     
   );
 }

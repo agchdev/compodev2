@@ -1,14 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import '../styles/Home.css'
-import SlidingBanner from '../components/SlidingBanner';
 
 const Home = () => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL
-  const [user, setUser] = useState(null)
-  const [users, setUsers] = useState([])
-  const [loadingUsers, setLoadingUsers] = useState(true)
   const featuredComponents = [
     {
       id: 1,
@@ -35,63 +30,8 @@ const Home = () => {
       image: 'https://via.placeholder.com/300x200/252836/4fffb5?text=Particles'
     }
   ]
- 
-  // Obtener usuarios
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoadingUsers(true);
-        const response = await axios.get(
-          `${backendUrl}/users/UserController.php?action=top_users&limit=8`,
-          { withCredentials: true }
-        );
-        
-        if (response.data && Array.isArray(response.data.users)) {
-          setUsers(response.data.users);
-        } else {
-          console.error('Formato de respuesta inesperado:', response.data);
-          setUsers([]);
-        }
-      } catch (error) {
-        console.error('Error al cargar usuarios:', error);
-        setUsers([]);
-      } finally {
-        setLoadingUsers(false);
-      }
-    };
 
-    fetchUsers();
-  }, [backendUrl]);
-
-  useEffect(() => {
-    const getSession = async () => {
-      try {
-        const response = await axios.get(
-          `${backendUrl}/users/UserController.php?action=session`,
-          { withCredentials: true }
-        );
-        const userData = response.data;
-        setUser(userData);
-      } catch (error) {
-        console.log("Error al obtener la sesión:", error)
-      }
-    }
-
-    getSession()
-  }, [backendUrl])
-
-  const logout = async () => {
-    try {
-      const response = await axios.get(
-        `${backendUrl}/users/UserController.php?action=logout`,
-        { withCredentials: true }
-      );
-      const userData = response.data;
-      setUser(userData);
-    } catch (error) {
-      console.log("Error al cerrar sesión:", error)
-    }
-  }
+  
 
   return (
     <div className="home-container">
@@ -131,90 +71,145 @@ const Home = () => {
         </div>
       </section>
       
-      {/* Sliding Banner between main sections */}
-      <SlidingBanner text="COMPODEV" />
 
-      {/* Services Section */}
+      {/* Services Section - Cyberpunk Style */}
       <section className="services-section">
-        <h2>Nuestros Servicios</h2>
-        <div className="services-container">
-          <div className="service-card">
-            <div className="service-icon">
+        <div className="service-header">
+          <h2>Nuestros <span className="text-gradient">Servicios</span></h2>
+          <div className="cyber-line"></div>
+          <p className="service-subtitle">Soluciones de vanguardia para desarrolladores del futuro</p>
+        </div>
+        
+        <div className="cyber-services-container">
+          <div className="cyber-service-card">
+            <div className="cyber-service-glow"></div>
+            <div className="service-number">01</div>
+            <div className="cyber-service-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M12 5l9 4-9 4-9-4 9-4zm0 8v6M3 9v6l9 4 9-4V9" />
               </svg>
             </div>
-            <h3>Creación de Componentes</h3>
-            <p>Desarrolla componentes web reutilizables con HTML, CSS y JavaScript en nuestro editor integrado</p>
+            <div className="cyber-service-content">
+              <h3>Creación de<br/>Componentes</h3>
+              <div className="cyber-divider"></div>
+              <p>Desarrolla componentes web con nuestro sistema de edición neuronal con tecnología de sincronización en tiempo real</p>
+            </div>
+            <div className="cyber-service-footer">
+              <div className="tech-tag">HTML</div>
+              <div className="tech-tag">CSS</div>
+              <div className="tech-tag">JS</div>
+            </div>
           </div>
-          <div className="service-card">
-            <div className="service-icon">
+          
+          <div className="cyber-service-card">
+            <div className="cyber-service-glow"></div>
+            <div className="service-number">02</div>
+            <div className="cyber-service-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M8 9l4-4 4 4m-4-4v14" />
               </svg>
             </div>
-            <h3>Publicación de Proyectos</h3>
-            <p>Comparte tus creaciones con la comunidad y construye tu portfolio profesional</p>
+            <div className="cyber-service-content">
+              <h3>Publicación de<br/>Proyectos</h3>
+              <div className="cyber-divider"></div>
+              <p>Comparte tus creaciones en nuestra red neural distribuida con verificación de autenticidad mediante blockchain</p>
+            </div>
+            <div className="cyber-service-footer">
+              <div className="tech-tag">NFT</div>
+              <div className="tech-tag">Cloud</div>
+              <div className="tech-tag">Sync</div>
+            </div>
           </div>
-          <div className="service-card">
-            <div className="service-icon">
+          
+          <div className="cyber-service-card">
+            <div className="cyber-service-glow"></div>
+            <div className="service-number">03</div>
+            <div className="cyber-service-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8" />
                 <path d="M21 21l-4.35-4.35" />
               </svg>
             </div>
-            <h3>Descubrimiento</h3>
-            <p>Explora miles de componentes creados por desarrolladores de todo el mundo</p>
+            <div className="cyber-service-content">
+              <h3>Búsqueda<br/>Inteligente</h3>
+              <div className="cyber-divider"></div>
+              <p>Algoritmo de búsqueda cuántica que encuentra exactamente lo que necesitas antes de que lo sepas</p>
+            </div>
+            <div className="cyber-service-footer">
+              <div className="tech-tag">AI</div>
+              <div className="tech-tag">Neural</div>
+              <div className="tech-tag">Quantum</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Components */}
-      <section className="featured-section">
-        <h2>Componentes Destacados</h2>
-        <div className="featured-components">
-          {featuredComponents.map(component => (
-            <div key={component.id} className="component-card">
-              <div className="component-image" style={{ backgroundImage: `url(${component.image})` }}></div>
-              <div className="component-details">
-                <h3>{component.title}</h3>
-                <p>por {component.author}</p>
-                <div className="component-stats">
-                  <span>{component.likes} Me gusta</span>
-                  <span>{component.downloads}K Descargas</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="view-more">
-          <Link to="/Search" className="btn btn-outline">Ver más componentes</Link>
-        </div>
-      </section>
 
-      {/* Algunos usuarios - Estilo futurista Web3 */}
-      <section className="users-showcase-section">
-        <h2>Algunos Usuarios</h2>
-        <div className="users-grid">
-          {loadingUsers ? (
-            <div className="loading-users">
-              <div className="cyber-spinner"></div>
-              <p>Cargando usuarios...</p>
-            </div>
-          ) : (
-            users.map((user) => (
-              <div key={user.id} className="user-card">
-                <div className="user-avatar">
-                  {/* Mostrar inicial del correo o usar imagen de usuario si está disponible */}
-                  {user.email && user.email.charAt(0).toUpperCase()}
-                </div>
-                <div className="user-info">
-                  <h3>{user.email ? user.email.split('@')[0] : 'Usuario'}</h3>
-                  <p className="user-stats">{user.proyectos || 0} Proyectos</p>
+      {/* Reseñas de Usuarios */}
+      <section className="user-reviews-section">
+        <h2>Lo que dicen nuestros <span className="text-gradient">usuarios</span></h2>
+        <div className="cyber-line"></div>
+        
+        <div className="reviews-container">
+          <div className="review-card">
+            <div className="review-header">
+              <div className="reviewer-avatar" style={{ backgroundColor: "#4834c9" }}>NS</div>
+              <div>
+                <h4>NeuroSlicer</h4>
+                <div className="rating">
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
                 </div>
               </div>
-            ))
-          )}
+            </div>
+            <p className="review-text">&ldquo;La plataforma revolucionó mi forma de programar. Los componentes son impresionantes y ahorran horas de trabajo. La cibernética en su máxima expresión.&rdquo;</p>
+            <div className="review-footer">
+              <span className="review-date">18 mayo, 2025</span>
+            </div>
+          </div>
+
+          <div className="review-card">
+            <div className="review-header">
+              <div className="reviewer-avatar" style={{ backgroundColor: "#5d4fff" }}>KR</div>
+              <div>
+                <h4>Kira_Render</h4>
+                <div className="rating">
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star">★</span>
+                </div>
+              </div>
+            </div>
+            <p className="review-text">&ldquo;Como diseñadora de interfaces neurales, encontré exactamente lo que necesitaba. La integración es perfecta y el soporte técnico responde en segundos.&rdquo;</p>
+            <div className="review-footer">
+              <span className="review-date">3 abril, 2025</span>
+            </div>
+          </div>
+
+          <div className="review-card">
+            <div className="review-header">
+              <div className="reviewer-avatar" style={{ backgroundColor: "#7a6fff" }}>VX</div>
+              <div>
+                <h4>VoidXcoder</h4>
+                <div className="rating">
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star filled">★</span>
+                  <span className="star half-filled">★</span>
+                </div>
+              </div>
+            </div>
+            <p className="review-text">&ldquo;Después de digitalizar mi conciencia, CompoNet fue mi primera elección para desarrollar mi plataforma. Eficiencia cuántica y diseños de otro nivel.&rdquo;</p>
+            <div className="review-footer">
+              <span className="review-date">27 marzo, 2025</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -238,47 +233,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="home-footer">
-        <div className="footer-content">
-          <div className="footer-info">
-            <h3>CompoDev</h3>
-            <p>Creado por Alejandro Aguayo</p>
-            <p>Una plataforma para desarrolladores web que buscan crear y compartir componentes reutilizables.</p>
-          </div>
-          <div className="footer-links">
-            <div className="link-group">
-              <h4>Plataforma</h4>
-              <ul>
-                <li><Link to="/">Inicio</Link></li>
-                <li><Link to="/Search">Explorar</Link></li>
-                <li><Link to="/crearProyecto">Crear</Link></li>
-              </ul>
-            </div>
-            <div className="link-group">
-              <h4>Cuenta</h4>
-              <ul>
-                {user ? (
-                  <>
-                    <li><Link to="/perfil">Mi Perfil</Link></li>
-                    <li><Link to="/editar-perfil">Configuración</Link></li>
-                    <li><a href="#" onClick={(e) => { e.preventDefault(); logout(); }}>Cerrar Sesión</a></li>
-                  </>
-                ) : (
-                  <>
-                    <li><Link to="/login">Iniciar Sesión</Link></li>
-                    <li><Link to="/register">Registrarse</Link></li>
-                    <li><Link to="/suscripciones">Planes Premium</Link></li>
-                  </>
-                )}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="copyright">
-          <p>&copy; 2025 CompoDev. Todos los derechos reservados.</p>
-        </div>
-      </footer>
+
     </div>
   )
 }

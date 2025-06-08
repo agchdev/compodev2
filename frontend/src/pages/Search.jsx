@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../styles/Search.css';
 import '../styles/AnimatedBackground.css';
-import SlidingBanner from '../components/SlidingBanner';
+import { FaUserPlus, FaUserCheck } from 'react-icons/fa';
 
 export default function Search() {
   // Estado para proyectos
@@ -21,6 +21,11 @@ export default function Search() {
   const [searchType, setSearchType] = useState('projects'); // 'projects' o 'users'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  
+  // Estado para seguimiento de usuarios
+  const [followedUsers, setFollowedUsers] = useState([]);
+  const [followLoading, setFollowLoading] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
   
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   
@@ -60,6 +65,61 @@ export default function Search() {
       setProjects([]);
     } finally {
       setLoading(false);
+    }
+  };
+  
+  // Función para obtener los usuarios que sigue el usuario actual
+  const fetchFollowedUsers = async (userId) => {
+    try {
+      const response = await axios.get(
+        `${backendUrl}/users/UserController.php?action=getFollowed&userId=${userId}`,
+        { withCredentials: true }
+      );
+      
+      if (response.data && Array.isArray(response.data)) {
+        setFollowedUsers(response.data.map(user => user.usuario_seguido_id));
+      }
+    } catch (error) {
+      console.error('Error al obtener usuarios seguidos:', error);
+    }
+  };
+  
+  // Función para seguir/dejar de seguir a un usuario
+  const handleFollowUser = async (userId) => {
+    if (!currentUserId) {
+      alert('Debes iniciar sesión para seguir a usuarios');
+      return;
+    }
+    
+    setFollowLoading(userId);
+    
+    const isFollowing = followedUsers.includes(userId);
+    const action = isFollowing ? 'unfollow' : 'follow';
+    
+    try {
+      const response = await axios.post(
+        `${backendUrl}/users/UserController.php?action=${action}`,
+        { userId: currentUserId, followId: userId },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        }
+      );
+      
+      if (response.data.success) {
+        // Actualizar estado de seguidos
+        if (isFollowing) {
+          setFollowedUsers(followedUsers.filter(id => id !== userId));
+        } else {
+          setFollowedUsers([...followedUsers, userId]);
+        }
+      }
+    } catch (error) {
+      console.error(`Error al ${isFollowing ? 'dejar de seguir' : 'seguir'} al usuario:`, error);
+    } finally {
+      setFollowLoading(null);
     }
   };
   
@@ -111,6 +171,28 @@ export default function Search() {
       setLoading(false);
     }
   };
+  
+  // Obtener sesión del usuario y sus seguidos
+  useEffect(() => {
+    const getSession = async () => {
+      try {
+        const response = await axios.get(
+          `${backendUrl}/users/UserController.php?action=session`,
+          { withCredentials: true }
+        );
+        if (response.data && response.data.id) {
+          setCurrentUserId(response.data.id);
+          // Una vez que tenemos el ID del usuario, obtenemos sus seguidos
+          fetchFollowedUsers(response.data.id);
+        }
+      } catch (error) {
+        console.log("Error al obtener la sesión:", error);
+      }
+    };
+    
+    getSession();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
   // Cargar datos iniciales según el tipo de búsqueda seleccionado
   useEffect(() => {
@@ -312,7 +394,13 @@ export default function Search() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
         />
-        <button type="submit" className="search-button">Buscar</button>
+        <button type="submit" className="search-button-hover">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          Buscar
+        </button>
       </form>
       
       {/* Estado de carga o error */}
@@ -324,26 +412,38 @@ export default function Search() {
       {/* Contenido según la pestaña seleccionada */}
       {!loading && !error && searchType === 'projects' && (
         <div className="results-container">
-          <h2>Componentes Encontrados</h2>
-          {/* Lista de proyectos */}
-          <div className="projects-grid">
+          <h2 className="results-title">Componentes Encontrados</h2>
+          {/* Tabla de proyectos */}
+          <div className="table-container">
             {projects.length > 0 ? (
-              projects.map((project) => (
-                <div key={project.id} className="project-card">
-                  <h3 className="project-title">{project.titulo}</h3>
-                  <p className="project-category">Categoría: {project.categoria}</p>
-                  <p className="project-description">
-                    {project.descripcion_proyecto?.length > 100 
-                      ? `${project.descripcion_proyecto.substring(0, 100)}...` 
-                      : project.descripcion_proyecto}
-                  </p>
-                  <div className="project-actions">
-                    <Link to={`/code-project/${project.id}`} className="view-button">
-                      Ver Proyecto
-                    </Link>
-                  </div>
-                </div>
-              ))
+              <table className="cyber-table projects-table">
+                <thead>
+                  <tr>
+                    <th>Título</th>
+                    <th>Categoría</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projects.map((project) => (
+                    <tr key={project.id} className="table-row">
+                      <td className="project-title">{project.titulo}</td>
+                      <td className="project-category">{project.categoria}</td>
+                      <td className="project-description">
+                        {project.descripcion_proyecto?.length > 80
+                          ? `${project.descripcion_proyecto.substring(0, 80)}...`
+                          : project.descripcion_proyecto}
+                      </td>
+                      <td>
+                        <Link to={`/code-project/${project.id}`} className="view-button">
+                          Ver Proyecto
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             ) : (
               <div className="no-results">No se encontraron proyectos</div>
             )}
@@ -389,43 +489,78 @@ export default function Search() {
       {/* Lista de usuarios */}
       {!loading && !error && searchType === 'users' && (
         <div className="results-container">
-          <h2>Usuarios Encontrados</h2>
-          <div className="users-list">
+          <h2 className="results-title">Usuarios Encontrados</h2>
+          <div className="table-container">
             {users.length > 0 ? (
-              users.map((user) => (
-                <div key={user.id} className="user-card">
-                  <div className="user-image">
-                    {user.imagen ? (
-                      <img 
-                        src={`${backendUrl}/users/imagenes/${user.imagen}`} 
-                        alt={`${user.username}`}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://via.placeholder.com/150?text=No+imagen';
-                        }}
-                      />
-                    ) : (
-                      <img src="https://via.placeholder.com/150?text=No+imagen" alt="Usuario sin imagen" />
-                    )}
-                  </div>
-                  <div className="user-info">
-                    <h3 className="user-name">{user.username}</h3>
-                    <p className="user-email">{user.email}</p>
-                    {user.descripcion && (
-                      <p className="user-description">
-                        {user.descripcion.length > 100 
-                          ? `${user.descripcion.substring(0, 100)}...` 
-                          : user.descripcion}
-                      </p>
-                    )}
-                  </div>
-                  <div className="user-actions">
-                    <Link to={`/profile/${user.id}`} className="view-button">
-                      Ver Perfil
-                    </Link>
-                  </div>
-                </div>
-              ))
+              <table className="cyber-table users-table">
+                <thead>
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr key={user.id} className="table-row">
+                      <td className="user-info-cell">
+                        <div className="user-avatar-name">
+                          <div className="user-avatar">
+                            {user.urlFoto ? (
+                              <img 
+                                src={`${backendUrl}/${user.urlFoto}`} 
+                                alt={`${user.user}`}
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.src = 'https://via.placeholder.com/50?text=No+imagen';
+                                }}
+                              />
+                            ) : (
+                              <img src="https://via.placeholder.com/50?text=No+imagen" alt="Usuario sin imagen" />
+                            )}
+                          </div>
+                          <span className="user-name">{user.user}</span>
+                        </div>
+                      </td>
+                      <td className="user-description-cell">
+                        {user.descripcion ? (
+                          user.descripcion.length > 80
+                            ? `${user.descripcion.substring(0, 80)}...`
+                            : user.descripcion
+                        ) : (
+                          <span className="no-description">Sin descripción</span>
+                        )}
+                      </td>
+                      <td className="user-actions-cell">
+                        <div className="action-buttons">
+                          <Link to={`/profile/${user.id}`} className="view-button">
+                            Ver Perfil
+                          </Link>
+                          {currentUserId && currentUserId !== user.id && (
+                            <button 
+                              onClick={() => handleFollowUser(user.id)}
+                              className={`follow-button ${followedUsers.includes(user.id) ? 'following' : ''}`}
+                              disabled={followLoading === user.id}
+                            >
+                              {followLoading === user.id ? (
+                                <span className="loading-spinner"></span>
+                              ) : followedUsers.includes(user.id) ? (
+                                <>
+                                  <FaUserCheck className="me-2" /> Siguiendo
+                                </>
+                              ) : (
+                                <>
+                                  <FaUserPlus className="me-2" /> Seguir
+                                </>
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             ) : (
               <div className="no-results">No se encontraron usuarios</div>
             )}
@@ -468,10 +603,7 @@ export default function Search() {
         </div>
       )}
       
-      {/* SlidingBanner al final de la página */}
-      {!loading && !error && (projects.length > 0 || users.length > 0) && (
-        <SlidingBanner text="COMPODEV" />
-      )}
+     
     </div>
   );
 }

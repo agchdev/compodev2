@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import AdminHeader from '../components/AdminHeader';
 import '../styles/AdminPanel.css';
 import '../styles/AnimatedBackground.css';
 
@@ -98,7 +97,6 @@ const AdminPanel = () => {
 
   return (
     <>
-      <AdminHeader />
       <div className="admin-container">
         {/* Fondo animado futurista */}
         <div className="cyber-background">
@@ -132,12 +130,12 @@ const AdminPanel = () => {
         </div>
       </div>
       
-      <div className="admin-header">
+      <div className="mt-20 text-center">
         <h1 className="admin-title">Panel de Administración</h1>
         <p className="admin-subtitle">Monitor de actividad y estadísticas de la plataforma</p>
       </div>
       
-      <div className="stats-grid">
+      <div className="stats-grid mt-20">
         <div className="stats-card">
           <h2>
             <span className="icon">
@@ -164,10 +162,6 @@ const AdminPanel = () => {
               <div className="stat-item">
                 <span className="stat-label">Último año:</span>
                 <span className="stat-value">{projectStats.last_year}</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-label">Total:</span>
-                <span className="stat-value">{projectStats.total || 0}</span>
               </div>
             </div>
           )}
@@ -199,10 +193,6 @@ const AdminPanel = () => {
               <div className="stat-item">
                 <span className="stat-label">Último año:</span>
                 <span className="stat-value">{messageStats.last_year}</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-label">Total:</span>
-                <span className="stat-value">{messageStats.total || 0}</span>
               </div>
             </div>
           )}
@@ -236,10 +226,6 @@ const AdminPanel = () => {
                 <span className="stat-label">Último año:</span>
                 <span className="stat-value">{userStats.last_year}</span>
               </div>
-              <div className="stat-item">
-                <span className="stat-label">Total:</span>
-                <span className="stat-value">{userStats.total || 0}</span>
-              </div>
             </div>
           )}
         </div>
@@ -255,7 +241,7 @@ const AdminPanel = () => {
           </svg>
           Actualizar datos
         </button>
-        <button className="admin-button" onClick={() => navigate('/admin/users')}>
+        <button className="admin-button" onClick={() => navigate('/Admin-users')}>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
             <circle cx="9" cy="7" r="4"></circle>
@@ -264,13 +250,22 @@ const AdminPanel = () => {
           </svg>
           Gestionar usuarios
         </button>
-        <button className="admin-button" onClick={() => navigate('/admin/projects')}>
+        <button className="admin-button" onClick={() => navigate('/Admin-projects')}>
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
             <polyline points="2 17 12 22 22 17"></polyline>
             <polyline points="2 12 12 17 22 12"></polyline>
           </svg>
           Gestionar proyectos
+        </button>
+        
+        <button className="admin-button" onClick={() => navigate('/Admin-messages')}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          Gestionar Mensajes
         </button>
       </div>
       </div>

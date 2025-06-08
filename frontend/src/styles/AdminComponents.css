@@ -21,7 +21,6 @@
     font-weight: 700;
     margin-bottom: 1rem;
     color: #ffffff;
-    text-shadow: 0 0 10px rgba(120, 70, 255, 0.7), 0 0 20px rgba(120, 70, 255, 0.5);
     letter-spacing: 1px;
 }
 
@@ -35,13 +34,15 @@
 .admin-table-container {
     background: rgba(15, 23, 42, 0.7);
     border-radius: 12px;
-    padding: 1rem;
+    padding: 1.5rem;
     backdrop-filter: blur(10px);
     box-shadow: 0 0 20px rgba(149, 128, 255, 0.2);
     border: 1px solid rgba(149, 128, 255, 0.3);
     overflow: hidden;
     position: relative;
     margin-bottom: 2rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .admin-table-container::before {

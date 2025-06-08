@@ -5,70 +5,199 @@ require_once __DIR__ . '/use_cases/UnfollowUser.php';
 require_once __DIR__ . '/use_cases/GetFollowedUsers.php';
 require_once __DIR__ . '/use_cases/CountFollowers.php';
 
-// Obtener ruta y método
-$requestUri = $_SERVER['REQUEST_URI'];
+// Obtener método HTTP
 $method = $_SERVER['REQUEST_METHOD'];
 
-header('Access-Control-Allow-Origin: http://localhost:5173/');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
-header('Content-Type: application/json; charset=utf-8');
+// Permitir cualquier origen durante el desarrollo
 
+if (!headers_sent()) {
+    header("Access-Control-Allow-Origin: http://localhost:5173");
+    header('Access-Control-Allow-Credentials: true');
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Authorization");
+}
+// Manejar solicitudes preflight OPTIONS
 if ($method === 'OPTIONS') {
     http_response_code(200);
     exit;
 }
 
-// Ruta: /follow/create  - POST
-if (strpos($requestUri, '/follow/create') !== false && $method === 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
-    if (!$data || !isset($data['id_usuario']) || !isset($data['id_proyecto'])) {
+// Para solicitudes normales, establecer el tipo de contenido JSON
+header("Content-Type: application/json; charset=UTF-8");
+
+// Verificar que se haya proporcionado una acción
+if (!isset($_GET['action'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'No se ha especificado ninguna acción']);
+    exit;
+}
+
+$action = $_GET['action'];
+
+switch ($action) {
+    case 'follow':
+        // Obtener los datos del cuerpo de la petición
+        $data = json_decode(file_get_contents('php://input'), true);
+        
+        // Verificar que se hayan proporcionado los IDs necesarios
+        if (!isset($data['userId']) || !isset($data['followId'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Faltan parámetros requeridos (userId y followId)']);
+            exit;
+        }
+        
+        try {
+            // Crear instancia de caso de uso y ejecutar
+            $useCase = new FollowUser();
+            $result = $useCase->execute($data['userId'], $data['followId']);
+            
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Usuario seguido correctamente'
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'No se pudo seguir al usuario'
+                ]);
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+        break;
+        
+    case 'unfollow':
+        // Obtener los datos del cuerpo de la petición
+        $data = json_decode(file_get_contents('php://input'), true);
+        
+        // Verificar que se hayan proporcionado los IDs necesarios
+        if (!isset($data['userId']) || !isset($data['followId'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Faltan parámetros requeridos (userId y followId)']);
+            exit;
+        }
+        
+        try {
+            // Crear instancia de caso de uso y ejecutar
+            $useCase = new UnfollowUser();
+            $result = $useCase->execute($data['userId'], $data['followId']);
+            
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'Usuario dejado de seguir correctamente'
+                ]);
+            } else {
+                http_response_code(500);
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'No se pudo dejar de seguir al usuario'
+                ]);
+            }
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+        break;
+        
+    case 'getFollowed':
+        // Verificar que se haya proporcionado el ID del usuario
+        if (!isset($_GET['userId'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Falta el parámetro userId']);
+            exit;
+        }
+        
+        $userId = intval($_GET['userId']);
+        
+        try {
+            // Crear instancia de caso de uso y ejecutar
+            $useCase = new GetFollowedUsers();
+            $followedUsers = $useCase->execute($userId);
+            
+            echo json_encode($followedUsers);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+        break;
+        
+    case 'countFollowers':
+        // Verificar que se haya proporcionado el ID del usuario
+        if (!isset($_GET['userId'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Falta el parámetro userId']);
+            exit;
+        }
+        
+        $userId = intval($_GET['userId']);
+        
+        try {
+            // Crear instancia de caso de uso y ejecutar
+            $useCase = new CountFollowers();
+            $count = $useCase->execute($userId);
+            
+            echo json_encode([
+                'success' => true,
+                'count' => $count
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage(),
+                'count' => 0
+            ]);
+        }
+        break;
+    
+    case 'countFollowing':
+        // Verificar que se haya proporcionado el ID del usuario
+        if (!isset($_GET['userId'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Falta el parámetro userId']);
+            exit;
+        }
+        
+        $userId = intval($_GET['userId']);
+        
+        try {
+            // Crear una consulta SQL personalizada para contar cuántos usuarios sigue este usuario
+            $pdo = new PDO('mysql:host=localhost;dbname=compodev', 'root', '');
+            $stmt = $pdo->prepare('SELECT COUNT(*) as total FROM seguimiento WHERE usuario_id = ?');
+            $stmt->execute([$userId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $count = $result['total'] ?? 0;
+            
+            echo json_encode([
+                'success' => true,
+                'count' => intval($count)
+            ]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode([
+                'success' => false,
+                'error' => $e->getMessage(),
+                'count' => 0
+            ]);
+        }
+        break;
+        
+    default:
+        // Acción no reconocida
         http_response_code(400);
-        echo json_encode(['error' => 'Datos inválidos']);
-        exit;
-    }
-    $useCase = new FollowUser();
-    $result = $useCase->execute($data['id_usuario'], $data['id_proyecto']);
-    if ($result) {
-        echo json_encode(['message' => 'Usuario seguido correctamente']);
-    }
-    exit;
+        echo json_encode(['error' => 'Acción no válida: ' . $action]);
+        break;
 }
-
-// Ruta: /follow/delete  - DELETE
-if (strpos($requestUri, '/follow/delete') !== false && $method === 'DELETE') {
-    $data = json_decode(file_get_contents('php://input'), true);
-    if (!$data || !isset($data['id_usuario']) || !isset($data['id_proyecto'])) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Datos inválidos']);
-        exit;
-    }
-    $useCase = new UnfollowUser();
-    $result = $useCase->execute($data['id_usuario'], $data['id_proyecto']);
-    if ($result) {
-        echo json_encode(['message' => 'Usuario dejado de seguir correctamente']);
-    }
-    exit;
-}
-
-// Ruta: /follow/followed/{id}  - GET
-if (preg_match('#/follow/followed/(\d+)#', $requestUri, $matches) && $method === 'GET') {
-    $id_usuario = intval($matches[1]);
-    $useCase = new GetFollowedUsers();
-    $users = $useCase->execute($id_usuario);
-    echo json_encode($users, JSON_UNESCAPED_UNICODE);
-    exit;
-}
-
-// Ruta: /follow/count/{id}  - GET
-if (preg_match('#/follow/count/(\d+)#', $requestUri, $matches) && $method === 'GET') {
-    $id_usuario = intval($matches[1]);
-    $useCase = new CountFollowers();
-    $count = $useCase->execute($id_usuario);
-    echo json_encode(['count' => $count], JSON_UNESCAPED_UNICODE);
-    exit;
-}
-
-// Ruta no encontrada
-http_response_code(404);
-echo json_encode(['error' => 'Ruta no encontrada']);

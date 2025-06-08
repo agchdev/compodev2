@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import axios from 'axios'
 import "../styles/Header.css"
+import AdminHeader from "./AdminHeader"
 
 const Header = () => {
   const [user, setUser] = useState(null)
@@ -76,6 +77,11 @@ const Header = () => {
       document.removeEventListener('click', closeMenus);
     };
   }, []);
+
+  // Si el usuario es admin, mostrar el AdminHeader en lugar del header normal
+  if (user && user.rol === 'admin') {
+    return <AdminHeader />;
+  }
 
   return (
     <header className="main-header">

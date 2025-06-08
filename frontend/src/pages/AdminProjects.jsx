@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import AdminHeader from '../components/AdminHeader';
 import { 
   FaEdit, 
   FaTrash, 
@@ -282,7 +281,6 @@ const AdminProjects = () => {
 
   return (
     <>
-      <AdminHeader />
       {/* Nuevo fondo animado futurista */}
       <div className="cyber-background">
                 {/* Partículas */}
@@ -323,7 +321,7 @@ const AdminProjects = () => {
             </div>
       
       <div className="admin-container ">
-        <div className="admin-header mt-20">
+        <div className="mt-20">
           <h1 className="admin-title">Administración de Proyectos</h1>
           <p className="admin-subtitle">Gestión y configuración de proyectos en la plataforma</p>
         </div>
@@ -382,9 +380,7 @@ const AdminProjects = () => {
                       <th className="id-column">ID</th>
                       <th>Título</th>
                       <th>Categoría</th>
-                      <th>Usuario</th>
                       <th>Fecha</th>
-                      <th>Puntuación</th>
                       <th className="actions-column">Acciones</th>
                     </tr>
                   </thead>
@@ -398,14 +394,7 @@ const AdminProjects = () => {
                             {project.categoria}
                           </span>
                         </td>
-                        <td>{project.nombre_usuario}</td>
                         <td>{new Date(project.fecha_subido).toLocaleDateString()}</td>
-                        <td>
-                          <div className="cyber-rating">
-                            <div className="cyber-stars" style={{ width: `${(project.puntuacion / 5) * 100}%` }}></div>
-                            <span>{project.puntuacion}</span>
-                          </div>
-                        </td>
                         <td className="actions-column">
                           <button
                             className="cyber-button-small edit"

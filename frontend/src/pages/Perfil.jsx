@@ -129,10 +129,10 @@ const Perfil = () => {
             ) : user ? (
                 <>
                     {/* Header del perfil con foto e información */}
-                    <div className="profile-header">
+                    <div className="profile-header mt-20">
                         <div className="profile-image-container">
                             <img 
-                                src={user.urlFoto || defaultProfileImage} 
+                                src={`${backendUrl}/${user.urlFoto || defaultProfileImage}`} 
                                 alt={`Perfil de ${user.user}`}
                                 className="profile-image"
                             />

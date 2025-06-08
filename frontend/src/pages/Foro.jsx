@@ -285,7 +285,6 @@ const Foro = () => {
                     messages.map((message) => (
 
                         <div key={message.id} className="message-card">
-                            {console.log(message)}
                             <div className="flex-row">
                                 <div className="user-avatar">
                                     {getUserInitials(message.username)}
@@ -310,11 +309,6 @@ const Foro = () => {
                                     onClick={() => handleMessageClick(message)}
                                 >
                                     Comentar
-                                </button>
-                                <button
-                                    className="action-button like-button"
-                                >
-                                    Me gusta
                                 </button>
                             </div>
 

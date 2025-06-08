@@ -26,7 +26,7 @@ class GetCommentsByMessage {
             
             // Preparar la consulta SQL para obtener los comentarios del mensaje con datos completos del usuario
             // Usamos el campo id_mensaje para relacionar con el ID del mensaje
-            $sql = "SELECT c.*, u.username, u.avatar, u.email, u.descripcion, u.fecha_registro 
+            $sql = "SELECT c.*, u.user, u.urlFoto, u.email, u.descripcion, u.fecha_registro 
                     FROM comentarios_usuarios c 
                     LEFT JOIN usuarios u ON c.id_usuario = u.id 
                     WHERE c.id_mensaje = ? 

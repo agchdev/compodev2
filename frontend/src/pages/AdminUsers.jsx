@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import AdminHeader from '../components/AdminHeader';
 import { 
   FaEdit, 
   FaTrash, 
@@ -282,48 +281,47 @@ const AdminUsers = () => {
 
   return (
     <>
-      <AdminHeader />
       {/* Nuevo fondo animado futurista */}
       <div className="cyber-background">
-                {/* Partículas */}
-                <div className="particles-container">
-                    <div className="particle"></div>
-                    <div className="particle"></div>
-                    <div className="particle"></div>
-                    <div className="particle"></div>
-                    <div className="particle"></div>
-                    <div className="particle"></div>
-                    <div className="particle"></div>
-                </div>
-                
-                {/* Efecto de cuadrícula */}
-                <div className="grid-container"></div>
-                
-                {/* Formas geométricas */}
-                <div className="cyber-shape hexagon shape-1"></div>
-                <div className="cyber-shape triangle shape-2"></div>
-                <div className="cyber-shape circle shape-3"></div>
-                <div className="cyber-shape rectangle shape-4"></div>
-                
-                {/* Líneas digitales */}
-                <div className="digital-lines">
-                    <div className="h-line"></div>
-                    <div className="h-line"></div>
-                    <div className="h-line"></div>
-                    <div className="v-line"></div>
-                    <div className="v-line"></div>
-                </div>
-            </div>
-            
-            {/* Elementos flotantes decorativos */}
-            <div className="profile-floating-elements">
-                <div className="profile-floating-element profile-element-1"></div>
-                <div className="profile-floating-element profile-element-2"></div>
-                <div className="profile-floating-element profile-element-3"></div>
-            </div>
+        {/* Partículas */}
+        <div className="particles-container">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+        </div>
+        
+        {/* Efecto de cuadrícula */}
+        <div className="grid-container"></div>
+        
+        {/* Formas geométricas */}
+        <div className="cyber-shape hexagon shape-1"></div>
+        <div className="cyber-shape triangle shape-2"></div>
+        <div className="cyber-shape circle shape-3"></div>
+        <div className="cyber-shape rectangle shape-4"></div>
+        
+        {/* Líneas digitales */}
+        <div className="digital-lines">
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="h-line"></div>
+          <div className="v-line"></div>
+          <div className="v-line"></div>
+        </div>
+      </div>
       
-      <div className="admin-container">
-        <div className="admin-header">
+      {/* Elementos flotantes decorativos */}
+      <div className="profile-floating-elements">
+        <div className="profile-floating-element profile-element-1"></div>
+        <div className="profile-floating-element profile-element-2"></div>
+        <div className="profile-floating-element profile-element-3"></div>
+      </div>
+      
+      <div className="admin-container" style={{ maxWidth: "1920px", margin: "0 auto", color: "white" }}>
+        <div className="mt-20">
           <h1 className="admin-title">Administración de Usuarios</h1>
           <p className="admin-subtitle">Gestión y configuración de cuentas de usuarios en la plataforma</p>
         </div>

@@ -13,8 +13,10 @@ import Foro from './pages/Foro';
 import AdminPanel from './pages/AdminPanel';
 import AdminProjects from './pages/AdminProjects';
 import AdminUsers from './pages/AdminUsers';
-import Subscription from './pages/Subscription';
 import UserContentPanel from './pages/UserContentPanel';
+import UserProfile from './pages/UserProfile';
+import CookieConsent from './components/CookieConsent';
+import SubscriptionSimple from './pages/SubscriptionSimple';
 
 function App() {
   return (
@@ -27,17 +29,19 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/crearProyecto' element={<CreateProyect />} />
             <Route path='/code-project/:id' element={<CodeProject />} />
-            <Route path='/suscripciones' element={<Subscription />} />
+            <Route path='/suscripciones' element={<SubscriptionSimple />} />
             <Route path='/perfil' element={<Perfil />} />
+            <Route path='/profile/:userId' element={<UserProfile />} />
             <Route path='/Search' element={<Search />} />
             <Route path='/editar-perfil' element={<ProfileEdit />} />
             <Route path='/foro' element={<Foro />} />
             <Route path='/Admin-panel' element={<AdminPanel />} />
             <Route path='/Admin-projects' element={<AdminProjects />} />
             <Route path='/Admin-users' element={<AdminUsers />} />
-            <Route path='/' element={<UserContentPanel />} />
+            <Route path='/Admin-messages' element={<UserContentPanel />} />
           </Route>
         </Routes>
+        <CookieConsent />
       </BrowserRouter>
     </>
   )

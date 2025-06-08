@@ -1,0 +1,466 @@
+/* Footer.css - Estilos futuristas para el footer de CompoDev */
+
+.cyber-footer {
+  position: relative;
+  background-color: rgba(15, 22, 40, 0.95);
+  padding: 3rem 2rem 2rem;
+  color: #e4e6f1;
+  overflow: hidden;
+  border-top: 1px solid rgba(93, 79, 255, 0.3);
+  box-shadow: 0 -10px 30px rgba(93, 79, 255, 0.1);
+}
+
+/* Líneas de cuadrícula animadas */
+.grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.grid-line {
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(93, 79, 255, 0.15), transparent);
+  animation: gridPulse 4s infinite alternate ease-in-out;
+}
+
+.grid-line:nth-child(1) {
+  top: 20%;
+  animation-delay: 0s;
+}
+
+.grid-line:nth-child(2) {
+  top: 40%;
+  animation-delay: 0.5s;
+}
+
+.grid-line:nth-child(3) {
+  top: 60%;
+  animation-delay: 1s;
+}
+
+.grid-line:nth-child(4) {
+  top: 80%;
+  animation-delay: 1.5s;
+}
+
+.grid-line:nth-child(5) {
+  top: 95%;
+  animation-delay: 2s;
+}
+
+@keyframes gridPulse {
+  0% {
+    opacity: 0.3;
+    box-shadow: 0 0 5px rgba(93, 79, 255, 0.3);
+  }
+  100% {
+    opacity: 0.7;
+    box-shadow: 0 0 15px rgba(93, 79, 255, 0.6);
+  }
+}
+
+/* Encabezado con logo */
+.footer-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  z-index: 1;
+}
+
+.cyber-logo {
+  position: relative;
+  display: inline-block;
+  margin: 0 auto;
+  padding-bottom: 1.5rem;
+}
+
+.logo-glitch {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: white;
+  position: relative;
+  display: inline-block;
+  text-shadow: 0 0 5px rgba(93, 79, 255, 0.7), 0 0 10px rgba(93, 79, 255, 0.5);
+  animation: textFlicker 5s infinite alternate;
+}
+
+.logo-glitch::before {
+  content: attr(data-text);
+  position: absolute;
+  left: -2px;
+  text-shadow: 2px 0 #ff00dc;
+  top: 0;
+  color: white;
+  background: rgba(15, 22, 40, 0.7);
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+  animation: noise-1 3s linear infinite alternate-reverse;
+}
+
+.logo-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 2px;
+  text-shadow: -2px 0 #5d4fff;
+  top: 0;
+  color: white;
+  background: rgba(15, 22, 40, 0.7);
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+  animation: noise-2 4s linear infinite alternate-reverse;
+}
+
+@keyframes noise-1 {
+  0%, 20%, 40%, 60%, 70%, 90% {clip-path: inset(0px 0px 0px 0px);}
+  10%, 30%, 50%, 80%, 100% {clip-path: inset(0px 0px 45px 0px);}
+  5%, 15%, 45%, 65%, 75%, 95% {clip-path: inset(0px 0px 20px 0px);}
+  25%, 35%, 55%, 85% {clip-path: inset(0px 0px 30px 0px);}
+}
+
+@keyframes noise-2 {
+  0%, 10%, 30%, 50%, 70%, 90% {clip-path: inset(0px 0px 0px 0px);}
+  5%, 15%, 45%, 65%, 75%, 85% {clip-path: inset(0px 0px 30px 0px);}
+  20%, 40%, 60%, 80%, 100% {clip-path: inset(0px 0px 15px 0px);}
+}
+
+.logo-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: rgba(93, 79, 255, 0.3);
+  animation: scanline 6s linear infinite;
+  opacity: 0.7;
+  z-index: 2;
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-5px);
+  }
+  70%, 100% {
+    transform: translateY(58px);
+    opacity: 0;
+  }
+}
+
+@keyframes textFlicker {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(93, 79, 255, 0.7), 0 0 10px rgba(93, 79, 255, 0.5);
+  }
+  10% {
+    text-shadow: none;
+  }
+  20% {
+    text-shadow: 0 0 5px rgba(93, 79, 255, 0.7), 0 0 10px rgba(93, 79, 255, 0.5);
+  }
+  22% {
+    text-shadow: none;
+  }
+  23% {
+    text-shadow: 0 0 5px rgba(93, 79, 255, 0.7), 0 0 10px rgba(93, 79, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 5px rgba(93, 79, 255, 0.7), 0 0 10px rgba(93, 79, 255, 0.5);
+  }
+  52% {
+    text-shadow: 0 0 5px rgba(255, 0, 220, 0.7), 0 0 10px rgba(255, 0, 220, 0.5);
+  }
+  54% {
+    text-shadow: 0 0 5px rgba(93, 79, 255, 0.7), 0 0 10px rgba(93, 79, 255, 0.5);
+  }
+  90% {
+    text-shadow: 0 0 5px rgba(93, 79, 255, 0.7), 0 0 10px rgba(93, 79, 255, 0.5);
+  }
+  92% {
+    text-shadow: 0 0 5px rgba(255, 0, 220, 0.7), 0 0 10px rgba(255, 0, 220, 0.5);
+  }
+  94% {
+    text-shadow: 0 0 5px rgba(93, 79, 255, 0.7), 0 0 10px rgba(93, 79, 255, 0.5);
+  }
+}
+
+/* Líneas de circuito */
+.circuit-lines {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
+  width: 50%;
+  height: 2px;
+  opacity: 0.8;
+}
+
+.circuit-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #5d4fff, transparent);
+}
+
+.circuit-dot {
+  width: 6px;
+  height: 6px;
+  margin: 0 10px;
+  background: #5d4fff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #5d4fff;
+  animation: dotPulse 3s infinite alternate;
+}
+
+@keyframes dotPulse {
+  0% {
+    box-shadow: 0 0 5px #5d4fff;
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 12px #5d4fff, 0 0 20px rgba(93, 79, 255, 0.5);
+    transform: scale(1.1);
+  }
+}
+
+/* Contenido del footer */
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+  padding: 0 1rem;
+}
+
+.footer-info {
+  flex: 1;
+  min-width: 300px;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+}
+
+.link-column {
+  min-width: 180px;
+}
+
+/* Estilo para brackets cyberpunk */
+.cyber-bracket {
+  color: #5d4fff;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* Título de las secciones */
+.footer-info h3, .link-column h4 {
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+  display: inline-block;
+  position: relative;
+  color: white;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.cyber-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  position: relative;
+  color: #a0a3b8;
+}
+
+/* Íconos sociales */
+.cyber-social {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(93, 79, 255, 0.4);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  background: rgba(93, 79, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-icon:hover {
+  border-color: #5d4fff;
+  box-shadow: 0 0 15px rgba(93, 79, 255, 0.5);
+  transform: translateY(-3px);
+}
+
+.social-icon:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(93, 79, 255, 0.4), transparent);
+  transition: all 0.3s ease;
+}
+
+.social-icon:hover:after {
+  left: 100%;
+  transition: all 0.8s ease;
+}
+
+/* Enlaces de navegación */
+.link-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.link-column li {
+  margin-bottom: 0.8rem;
+}
+
+.link-column a {
+  color: #a0a3b8;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  padding: 0.2rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.link-column a:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #5d4fff;
+  transition: width 0.4s ease;
+}
+
+.link-column a:hover {
+  color: white;
+  transform: translateX(5px);
+}
+
+.link-column a:hover:before {
+  width: 100%;
+  box-shadow: 0 0 10px rgba(93, 79, 255, 0.5);
+}
+
+.link-column svg {
+  color: #5d4fff;
+  transition: all 0.3s ease;
+}
+
+.link-column a:hover svg {
+  transform: scale(1.2);
+}
+
+/* Firma digital con línea de datos */
+.footer-signature {
+  position: relative;
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  z-index: 1;
+}
+
+.data-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(93, 79, 255, 0.3), transparent);
+  margin: 1rem auto;
+  position: relative;
+}
+
+.data-line::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 1px;
+  background: #5d4fff;
+  top: 0;
+  left: 10%;
+  opacity: 0.8;
+  animation: dataMove 4s linear infinite;
+}
+
+@keyframes dataMove {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.cyber-code {
+  font-family: 'Courier New', monospace;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 1px;
+}
+
+.copyright {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .footer-links {
+    gap: 2rem;
+  }
+
+  .circuit-lines {
+    width: 80%;
+  }
+
+  .logo-glitch {
+    font-size: 2rem;
+  }
+}
+
+/* Mejoras de accesibilidad para lectores de pantalla */
+@media (prefers-reduced-motion: reduce) {
+  .logo-scanline,
+  .logo-glitch::before,
+  .logo-glitch::after,
+  .grid-line,
+  .data-line::after {
+    animation: none !important;
+  }
+}
