@@ -72,6 +72,7 @@ VITE_BACKEND_URL="http://localhost/compodev2/backend"
 VITE_GOOGLE_API_KEY="tu_api_key_de_google"
 VITE_INSTRUCCIONES="Instrucciones para la IA"
 ```
+    - LAS CREDENCIALES SE ENCUENTRAN EN EL PDF DEL TFG
 
 5. Iniciar el servidor de desarrollo:
 ```bash
