@@ -17,6 +17,7 @@ import UserContentPanel from './pages/UserContentPanel';
 import UserProfile from './pages/UserProfile';
 import CookieConsent from './components/CookieConsent';
 import SubscriptionSimple from './pages/SubscriptionSimple';
+import AdminRoute from './components/AdminRoute';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Plantilla />}>
+            {/* Rutas públicas */}
             <Route index element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
@@ -35,10 +37,14 @@ function App() {
             <Route path='/Search' element={<Search />} />
             <Route path='/editar-perfil' element={<ProfileEdit />} />
             <Route path='/foro' element={<Foro />} />
-            <Route path='/Admin-panel' element={<AdminPanel />} />
-            <Route path='/Admin-projects' element={<AdminProjects />} />
-            <Route path='/Admin-users' element={<AdminUsers />} />
-            <Route path='/Admin-messages' element={<UserContentPanel />} />
+            
+            {/* Rutas protegidas de administrador */}
+            <Route element={<AdminRoute />}>
+              <Route path='/Admin-panel' element={<AdminPanel />} />
+              <Route path='/Admin-projects' element={<AdminProjects />} />
+              <Route path='/Admin-users' element={<AdminUsers />} />
+              <Route path='/Admin-messages' element={<UserContentPanel />} />
+            </Route>
           </Route>
         </Routes>
         <CookieConsent />
