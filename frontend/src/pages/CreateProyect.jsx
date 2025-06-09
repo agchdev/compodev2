@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import '../styles/CreateProject.css';
-import SlidingBanner from '../components/SlidingBanner';
 
 const CreateProyect = () => {
     const [formData, setFormData] = useState({
@@ -176,8 +175,8 @@ const CreateProyect = () => {
                 <div className="particles"></div>
             </div>
             
-            <div className="create-project-content">
-                <div className="create-project-header">
+            <div className="create-project-content ">
+                <div className="create-project-header mt-10">
                     <h1>Crear Componente</h1>
                     <p>Comparte tu creatividad con el mundo. Crea un nuevo componente para la comunidad CompoDev.</p>
                 </div>
@@ -245,7 +244,6 @@ const CreateProyect = () => {
                 </form>
             </div>
             
-            <SlidingBanner text="COMPODEV" />
         </div>
     )
 }

@@ -350,11 +350,11 @@ const Foro = () => {
                                                 <div key={comment.id} className="comment-card">
                                                     <div className="comment-header">
                                                         <div className="comment-avatar">
-                                                            {getUserInitials(comment.username)}
+                                                            {getUserInitials(comment.user)}
                                                         </div>
                                                         <div className="comment-user-info">
                                                             <p className="comment-username">
-                                                                {comment.username || 'Usuario'}
+                                                                {comment.user || 'Usuario'}
                                                             </p>
                                                             <p className="comment-date">
                                                                 {formatDate(comment.fecha)}

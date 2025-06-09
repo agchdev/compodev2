@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../entities/Project.php';
+require_once __DIR__ . '/../../actividad_usuarios/entities/ActivityUsers.php';
+require_once __DIR__ . '/../../actividad_usuarios/use_cases/CreateActivityUser.php';
 
 class CreateProject {
     public function execute($data) {
@@ -46,6 +48,17 @@ class CreateProject {
             
             // Agregar el ID al objeto de proyecto
             $project->id = $projectId;
+            
+            // Registrar la actividad del usuario
+            $activity = new ActivityUsers(
+                $project->id_usuario,
+                'crear_proyecto',
+                date('Y-m-d'),
+                $projectId
+            );
+            
+            $createActivityUser = new CreateActivityUser();
+            $createActivityUser->execute($activity);
             
             echo json_encode(["message" => "Proyecto creado con éxito", "proyecto" => $project, "id" => $projectId]);
         } else {

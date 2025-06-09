@@ -486,6 +486,98 @@
     }
 }
 
+/* Estilos para la sección de actividades de usuarios */
+.activities-container {
+    background: rgba(15, 23, 42, 0.7);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(149, 128, 255, 0.2);
+    border: 1px solid rgba(149, 128, 255, 0.3);
+    margin-top: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.activities-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(149, 128, 255, 0.3);
+    padding-bottom: 0.8rem;
+}
+
+.activities-title svg {
+    margin-right: 10px;
+    background: linear-gradient(135deg, #9580ff, #50c5ff);
+    border-radius: 50%;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.activities-list {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    border-bottom: 1px solid rgba(149, 128, 255, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.activity-item:hover {
+    background-color: rgba(149, 128, 255, 0.05);
+}
+
+.activity-icon {
+    background: linear-gradient(135deg, #7846ff, #5e3fd8);
+    border-radius: 50%;
+    padding: 8px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-text {
+    color: #e0e6fd;
+    margin-bottom: 8px;
+}
+
+.activity-username {
+    font-weight: bold;
+    color: #ffffff;
+    background: linear-gradient(90deg, #9580ff, #50c5ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.activity-date {
+    font-size: 0.8rem;
+    color: #a0a7dd;
+    display: block;
+}
+
+.no-activities {
+    text-align: center;
+    color: #a0a7dd;
+    padding: 2rem 0;
+    font-style: italic;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .stats-grid {
@@ -506,5 +598,13 @@
     
     .admin-container {
         padding: 1rem;
+    }
+    
+    .activity-item {
+        padding: 0.8rem;
+    }
+    
+    .activities-title {
+        font-size: 1.3rem;
     }
 }

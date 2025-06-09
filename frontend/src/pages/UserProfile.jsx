@@ -107,9 +107,11 @@ const UserProfile = () => {
                 );
                 
                 if (Array.isArray(response.data)) {
-                    const isAlreadyFollowing = response.data.some(
-                        followData => followData.usuario_seguido_id === parseInt(userId)
-                    );
+                    // Extraer IDs de los usuarios seguidos y verificar si el usuario actual está en la lista
+                    const followedUserIds = response.data.map(user => Number(user.id));
+                    console.log('Usuarios seguidos:', followedUserIds);
+                    console.log('Verificando si sigue a:', parseInt(userId));
+                    const isAlreadyFollowing = followedUserIds.includes(parseInt(userId));
                     setIsFollowing(isAlreadyFollowing);
                 }
             } catch (error) {
@@ -167,8 +169,8 @@ const UserProfile = () => {
             const response = await axios.post(
                 `${backendUrl}/follow_users/FollowUsersController.php?action=${action}`,
                 {
-                    userId: currentUser.id,
-                    followId: parseInt(userId)
+                    id_usu1: Number(currentUser.id),
+                    id_usu2: Number(userId)
                 },
                 {
                     headers: {

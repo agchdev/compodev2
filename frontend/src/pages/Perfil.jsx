@@ -9,6 +9,8 @@ const Perfil = () => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [deleteLoading, setDeleteLoading] = useState(null);
+    const [followersCount, setFollowersCount] = useState(0);
+    const [followingCount, setFollowingCount] = useState(0);
 
     const navigate = useNavigate();
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
@@ -37,7 +39,6 @@ const Perfil = () => {
     useEffect(() => {
         if (!user) return;
         const getProjects = async () => {
-            console.log(user.id)
             try {
                 setLoading(true);
                 const response = await axios.get(
@@ -46,7 +47,6 @@ const Perfil = () => {
                 );
                 const ps = response.data;
                 setProjects(ps);
-                console.log(ps)
             } catch (error) {
                 console.log("Error al obtener los proyectos:", error)
             } finally {
@@ -54,7 +54,37 @@ const Perfil = () => {
             }
         }
 
+        const getFollowersCount = async () => {
+            try {
+                const response = await axios.get(
+                    `${backendUrl}/follow_users/FollowUsersController.php?action=countFollowers&userId=${user.id}`,
+                    { withCredentials: true }
+                );
+                if (response.data && response.data.success) {
+                    setFollowersCount(response.data.count);
+                }
+            } catch (error) {
+                console.log("Error al obtener número de seguidores:", error);
+            }
+        };
+        
+        const getFollowingCount = async () => {
+            try {
+                const response = await axios.get(
+                    `${backendUrl}/follow_users/FollowUsersController.php?action=countFollowing&userId=${user.id}`,
+                    { withCredentials: true }
+                );
+                if (response.data && response.data.success) {
+                    setFollowingCount(response.data.count);
+                }
+            } catch (error) {
+                console.log("Error al obtener número de seguidos:", error);
+            }
+        };
+
         getProjects();
+        getFollowersCount();
+        getFollowingCount();
     }, [user, backendUrl])
     
     const handleDeleteProject = async (projectId) => {
@@ -151,11 +181,11 @@ const Perfil = () => {
                                     <span className="meta-label">Componentes</span>
                                 </div>
                                 <div className="meta-item">
-                                    <span className="meta-value">{user.seguidores || 0}</span>
+                                    <span className="meta-value">{followersCount}</span>
                                     <span className="meta-label">Seguidores</span>
                                 </div>
                                 <div className="meta-item">
-                                    <span className="meta-value">{user.siguiendo || 0}</span>
+                                    <span className="meta-value">{followingCount}</span>
                                     <span className="meta-label">Siguiendo</span>
                                 </div>
                             </div>

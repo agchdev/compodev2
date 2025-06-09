@@ -7,12 +7,12 @@ class GetFollowedUsers {
         $db = new DB();
         $conn = $db->getConn();
         
-        // Obtener todos los datos de las personas que sigue un usuario
+        // Obtener todos los datos de las personas que sigue un usuario (id_usu1 es quien sigue, id_usu2 es a quien sigue)
         $stmt = $conn->prepare("
             SELECT u.* 
             FROM users u
-            INNER JOIN seguidores_usuarios f ON u.id = f.id_proyecto
-            WHERE f.id_usuario = ?
+            INNER JOIN seguidres_usuarios f ON u.id = f.id_usu2
+            WHERE f.id_usu1 = ?
         ");
         
         if (!$stmt) {

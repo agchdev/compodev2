@@ -3,27 +3,25 @@
 require_once __DIR__ . '/../../config/database.php';
 
 class UnfollowUser {
-    public function execute($id_usuario, $id_proyecto) {
-        $db = new DB();
-        $conn = $db->getConn();
-        
-        // Eliminar la relación de seguimiento entre usuarios
-        $stmt = $conn->prepare("DELETE FROM seguidores_usuarios WHERE id_usuario = ? AND id_proyecto = ?");
-        if (!$stmt) {
-            http_response_code(500);
-            echo json_encode(["error" => "Error al preparar la consulta"]);
-            return false;
-        }
-        
-        $stmt->bind_param("ii", $id_usuario, $id_proyecto);
-        $result = $stmt->execute();
-        $stmt->close();
-        
-        if ($result) {
-            return true;
-        } else {
-            http_response_code(500);
-            echo json_encode(["error" => "Error al eliminar el seguimiento"]);
+    public function execute($id_usu1, $id_usu2) {
+        try {
+            $db = new DB();
+            $conn = $db->getConn();
+            
+            // Eliminar la relación de seguimiento entre usuarios
+            $stmt = $conn->prepare("DELETE FROM seguidres_usuarios WHERE id_usu1 = ? AND id_usu2 = ?");
+            if (!$stmt) {
+                return false; // Error al preparar la consulta
+            }
+            
+            $stmt->bind_param("ii", $id_usu1, $id_usu2);
+            $result = $stmt->execute();
+            $stmt->close();
+            
+            return $result;
+        } catch (Exception $e) {
+            // Registra el error pero devuelve false
+            error_log("Error en UnfollowUser: " . $e->getMessage());
             return false;
         }
     }

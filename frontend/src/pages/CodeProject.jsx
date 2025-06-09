@@ -6,16 +6,18 @@ import { javascript } from '@codemirror/lang-javascript';
 import './CodeProject.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { FaSave, FaCode, FaHtml5, FaCss3Alt, FaJs } from 'react-icons/fa';
+import { FaSave, FaCode, FaHtml5, FaCss3Alt, FaJs, FaRobot } from 'react-icons/fa';
 import '../styles/AnimatedBackground.css';
+import AICodeGenerator from '../components/AICodeGenerator';
 
 const CodeProject = () => {
   const [htmlCode, setHtmlCode] = useState('<!-- Escribe tu HTML aquí -->\n<div class="container">\n  <h1>Hello CompoDev!</h1>\n  <p>Edita este HTML y verás los cambios en tiempo real</p>\n</div>');
   const [cssCode, setCssCode] = useState('/* Escribe tu CSS aquí */\n\nbody {\n  font-family: Arial, sans-serif;\n  margin: 0;\n  padding: 20px;\n}\n\n.container {\n  max-width: 800px;\n  margin: 0 auto;\n  background-color: #f5f5f5;\n  padding: 20px;\n  border-radius: 8px;\n  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n}');
   const [jsCode, setJsCode] = useState('// Escribe tu JavaScript aquí\n\nconsole.log("CompoDev JavaScript cargado");\n\n// Ejemplo de código JavaScript\nfunction cambiarColor() {\n  const h1 = document.querySelector("h1");\n  h1.style.color = getRandomColor();\n}\n\nfunction getRandomColor() {\n  return "#" + Math.floor(Math.random()*16777215).toString(16);\n}');
   const [combinedCode, setCombinedCode] = useState('');
-  const [user, setUser] = useState(null)
-  const [owner, setOwner] = useState(false) // Para saber si el dueño del proyecto o no
+  const [user, setUser] = useState(null);
+  const [owner, setOwner] = useState(false); // Para saber si el dueño del proyecto o no
+  const [showAIGenerator, setShowAIGenerator] = useState(false); // Para mostrar/ocultar el generador de IA
   const idParam = useParams();
   const navigate = useNavigate();
   const backendUrl = import.meta.env.VITE_BACKEND_URL
@@ -82,6 +84,14 @@ const CodeProject = () => {
     } catch (error) {
         console.log("Error al guardar el proyecto:", error)
     }
+}
+
+// Función para insertar código generado por IA
+const handleInsertGeneratedCode = (generatedCode) => {
+  if (generatedCode.html) setHtmlCode(generatedCode.html);
+  if (generatedCode.css) setCssCode(generatedCode.css);
+  if (generatedCode.js) setJsCode(generatedCode.js);
+  setShowAIGenerator(false); // Cerrar el generador después de insertar
 }
 
 
@@ -209,13 +219,30 @@ const CodeProject = () => {
           
         </div>
       </div>
-      {owner && (
-            <div className="save-container mb-20">
-              <button onClick={handleSave} className="cyber-button primary save-button">
-                <FaSave className="me-2" /> Guardar Proyecto
-              </button>
-            </div>
-          )}
+      <div className="action-buttons-container mb-20">
+        {/* Botón para activar el asistente de código */}
+        <button 
+          onClick={() => setShowAIGenerator(prev => !prev)} 
+          className="cyber-button secondary ai-button"
+          title="Crear código con asistente">
+          <FaRobot className="me-2" /> Asistente de código
+        </button>
+        
+        {/* Botón para guardar solo para el dueño */}
+        {owner && (
+          <button onClick={handleSave} className="cyber-button primary save-button">
+            <FaSave className="me-2" /> Guardar Proyecto
+          </button>
+        )}
+      </div>
+      
+      {/* Mostrar el generador de IA si está activo */}
+      {showAIGenerator && (
+        <AICodeGenerator 
+          onClose={() => setShowAIGenerator(false)} 
+          onInsert={handleInsertGeneratedCode}
+        />
+      )}
     </>
     
   );

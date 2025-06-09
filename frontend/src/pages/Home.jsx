@@ -1,37 +1,8 @@
-import { useEffect } from 'react'
-import axios from 'axios'
+
 import { Link } from 'react-router-dom'
 import '../styles/Home.css'
 
 const Home = () => {
-  const featuredComponents = [
-    {
-      id: 1,
-      title: 'Animated Card Slider',
-      author: 'maria_dev',
-      likes: 245,
-      downloads: 1.2,
-      image: 'https://via.placeholder.com/300x200/252836/5d4fff?text=Card+Slider'
-    },
-    {
-      id: 2,
-      title: 'Responsive Navbar',
-      author: 'code_master',
-      likes: 198,
-      downloads: 0.9,
-      image: 'https://via.placeholder.com/300x200/252836/ff4f9b?text=Responsive+Nav'
-    },
-    {
-      id: 3,
-      title: 'Particle Background',
-      author: 'web_wizard',
-      likes: 312,
-      downloads: 1.7,
-      image: 'https://via.placeholder.com/300x200/252836/4fffb5?text=Particles'
-    }
-  ]
-
-  
 
   return (
     <div className="home-container">

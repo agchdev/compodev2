@@ -1,0 +1,215 @@
+/* Estilos para el generador de código IA */
+.ai-generator-panel {
+  background: rgba(13, 17, 23, 0.95);
+  border: 1px solid rgba(79, 209, 197, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 15px rgba(79, 209, 197, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  color: #e6e6e6;
+  backdrop-filter: blur(10px);
+  font-family: 'Inter', sans-serif;
+}
+
+.ai-generator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(79, 209, 197, 0.2);
+  padding-bottom: 0.75rem;
+}
+
+.ai-generator-title {
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: #4fd1c5;
+  display: flex;
+  align-items: center;
+}
+
+.ai-generator-title svg {
+  margin-right: 0.5rem;
+}
+
+.ai-close-button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.ai-close-button:hover {
+  color: #4fd1c5;
+}
+
+.ai-prompt-textarea {
+  width: 100%;
+  background-color: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(79, 209, 197, 0.2);
+  border-radius: 6px;
+  padding: 0.75rem;
+  color: #e6e6e6;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ai-prompt-textarea:focus {
+  outline: none;
+  border-color: rgba(79, 209, 197, 0.5);
+  box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.1);
+}
+
+.ai-prompt-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.ai-buttons-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.ai-generate-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.25rem;
+  background: linear-gradient(135deg, #4fd1c5, #38b2ac);
+  border: none;
+  border-radius: 6px;
+  color: #0d1117;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ai-generate-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #38b2ac, #319795);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 209, 197, 0.3);
+}
+
+.ai-generate-button:disabled {
+  background: linear-gradient(135deg, #2c5250, #234e4b);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+}
+
+.ai-character-count {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+}
+
+.ai-output-preview {
+  margin-top: 1rem;
+  background-color: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(79, 209, 197, 0.2);
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.ai-output-title {
+  color: #4fd1c5;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.ai-code-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.ai-code-tab {
+  text-align: center;
+  font-size: 0.75rem;
+  padding: 0.25rem 0;
+  border-radius: 4px;
+}
+
+.ai-html-tab {
+  background-color: rgba(30, 64, 175, 0.3);
+  color: #93c5fd;
+}
+
+.ai-css-tab {
+  background-color: rgba(192, 38, 211, 0.3);
+  color: #f9a8d4;
+}
+
+.ai-js-tab {
+  background-color: rgba(234, 179, 8, 0.3);
+  color: #fef08a;
+}
+
+.ai-success-message {
+  color: #4ade80;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.ai-success-message svg {
+  margin-right: 0.25rem;
+}
+
+.ai-error-message {
+  background-color: rgba(220, 38, 38, 0.2);
+  color: #f87171;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+
+/* Estilo para el contenedor de botones en CodeProject.jsx */
+.action-buttons-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.cyber-button.secondary.ai-button {
+  background: linear-gradient(135deg, #4fd1c5, #319795);
+}
+
+.cyber-button.secondary.ai-button:hover {
+  background: linear-gradient(135deg, #38b2ac, #2c7a7b);
+  transform: translateY(-2px);
+}
+
+/* Animaciones */
+@keyframes ai-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 209, 197, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(79, 209, 197, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 209, 197, 0);
+  }
+}
+
+.ai-pulse {
+  animation: ai-pulse 2s infinite;
+}
+
+/* Responsivo */
+@media (max-width: 640px) {
+  .ai-generator-panel {
+    width: 90%;
+    left: 5%;
+    right: 5%;
+    bottom: 1rem;
+  }
+}

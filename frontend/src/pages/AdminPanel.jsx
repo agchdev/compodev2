@@ -8,6 +8,7 @@ const AdminPanel = () => {
   const [projectStats, setProjectStats] = useState(null)
   const [messageStats, setMessageStats] = useState(null)
   const [userStats, setUserStats] = useState(null)
+  const [userActivities, setUserActivities] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const navigate = useNavigate();
@@ -35,11 +36,12 @@ const AdminPanel = () => {
     };
     
     checkAdmin();
-  }, [navigate]);
+  }, [navigate, backendUrl]);
 
   const fetchStats = useCallback(async () => {
     try {
       setLoading(true);
+      setError(null);
       
       // Obtener estadísticas de proyectos
       const projectResponse = await axios.get(
@@ -47,13 +49,15 @@ const AdminPanel = () => {
         { withCredentials: true }
       );
       const projectData = projectResponse.data;
-
+      setProjectStats(projectData);
+      
       // Obtener estadísticas de mensajes
       const messageResponse = await axios.get(
         `${backendUrl}/admin_panel/AdminController.php?action=messageStats`,
         { withCredentials: true }
       );
       const messageData = messageResponse.data;
+      setMessageStats(messageData);
       
       // Obtener estadísticas de usuarios
       const userResponse = await axios.get(
@@ -61,15 +65,36 @@ const AdminPanel = () => {
         { withCredentials: true }
       );
       const userData = userResponse.data;
-      
-      setProjectStats(projectData);
-      setMessageStats(messageData);
       setUserStats(userData);
+      
+      // Obtener actividades de usuarios
+      try {
+        const activitiesResponse = await axios.get(
+          `${backendUrl}/actividad_usuarios/ActivityUsersController.php?action=getAll`,
+          { withCredentials: true }
+        );
+        
+        if (activitiesResponse.data && Array.isArray(activitiesResponse.data)) {
+          setUserActivities(activitiesResponse.data);
+        } else {
+          console.warn('La respuesta de actividades no es un array:', activitiesResponse.data);
+          setUserActivities([]);
+        }
+      } catch (activitiesError) {
+        console.error('Error al cargar actividades:', activitiesError);
+        setUserActivities([]);
+      }
+      
       setLoading(false);
     } catch (err) {
       console.error('Error al cargar estadísticas:', err);
-      setError('Error al cargar las estadísticas. Intenta de nuevo más tarde.');
+      setError('Error al cargar estadísticas. Por favor, inténtelo de nuevo.');
       setLoading(false);
+      // Asegurarnos de que los estados tengan valores predeterminados en caso de error
+      setProjectStats({});
+      setMessageStats({});
+      setUserStats({});
+      setUserActivities([]);
     }
   }, [backendUrl]);
   
@@ -267,6 +292,53 @@ const AdminPanel = () => {
           </svg>
           Gestionar Mensajes
         </button>
+      </div>
+      
+      {/* Sección de Actividades de Usuarios */}
+      <div className="activities-container">
+        <h2 className="activities-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          Actividades Recientes
+        </h2>
+        
+        <div className="activities-list">
+          {userActivities.length > 0 ? (
+            userActivities.map((activity, index) => (
+              <div key={index} className="activity-item">
+                <div className="activity-icon">
+                  {activity.accion === 'crear_proyecto' ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    </svg>
+                  ) : activity.accion === 'crear_comentario' ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  ) : (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                    </svg>
+                  )}
+                </div>
+                <div className="activity-content">
+                  <p className="activity-text">
+                    <span className="activity-username">{activity.username || activity.user || `Usuario ID: ${activity.id_usuario}`}</span>
+                    {activity.accion === 'crear_proyecto' && ' creó un nuevo proyecto'}
+                    {activity.accion === 'crear_comentario' && ' añadió un nuevo comentario'}
+                    {!['crear_proyecto', 'crear_comentario'].includes(activity.accion) && ` realizó la acción: ${activity.accion}`}
+                  </p>
+                  <span className="activity-date">{new Date(activity.fecha).toLocaleDateString()}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="no-activities">No hay actividades recientes</p>
+          )}
+        </div>
       </div>
       </div>
     </>

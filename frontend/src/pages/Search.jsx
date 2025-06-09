@@ -72,12 +72,15 @@ export default function Search() {
   const fetchFollowedUsers = async (userId) => {
     try {
       const response = await axios.get(
-        `${backendUrl}/users/UserController.php?action=getFollowed&userId=${userId}`,
+        `${backendUrl}/follow_users/FollowUsersController.php?action=getFollowed&userId=${userId}`,
         { withCredentials: true }
       );
       
       if (response.data && Array.isArray(response.data)) {
-        setFollowedUsers(response.data.map(user => user.usuario_seguido_id));
+        // Extraer los IDs de los usuarios seguidos
+        const followedIds = response.data.map(user => Number(user.id));
+        console.log('Usuarios seguidos:', followedIds);
+        setFollowedUsers(followedIds);
       }
     } catch (error) {
       console.error('Error al obtener usuarios seguidos:', error);
@@ -97,13 +100,13 @@ export default function Search() {
     const action = isFollowing ? 'unfollow' : 'follow';
     
     try {
+      console.log('currentUserId:', currentUserId);
+      console.log('userId:', userId);
       const response = await axios.post(
-        `${backendUrl}/users/UserController.php?action=${action}`,
-        { userId: currentUserId, followId: userId },
+        `${backendUrl}/follow_users/FollowUsersController.php?action=${action}`,
+        { id_usu1: Number(currentUserId), id_usu2: Number(userId) },
         {
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           withCredentials: true
         }
       );
@@ -512,11 +515,11 @@ export default function Search() {
                                 alt={`${user.user}`}
                                 onError={(e) => {
                                   e.target.onerror = null;
-                                  e.target.src = 'https://via.placeholder.com/50?text=No+imagen';
+                                  e.target.src = '';
                                 }}
                               />
                             ) : (
-                              <img src="https://via.placeholder.com/50?text=No+imagen" alt="Usuario sin imagen" />
+                              <img src="" alt="Usuario sin imagen" />
                             )}
                           </div>
                           <span className="user-name">{user.user}</span>

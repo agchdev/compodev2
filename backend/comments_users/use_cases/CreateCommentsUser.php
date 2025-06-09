@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/../../config/database.php';
 require_once __DIR__ . '/../entities/CommentsUser.php';
+require_once __DIR__ . '/../../actividad_usuarios/entities/ActivityUsers.php';
+require_once __DIR__ . '/../../actividad_usuarios/use_cases/CreateActivityUser.php';
 
 /**
  * Caso de uso para crear un nuevo comentario de usuario
@@ -66,6 +68,17 @@ class CreateCommentsUser {
                     // Cerrar la conexión
                     $stmt->close();
                     $conn->close();
+                    
+                    // Registrar la actividad del usuario
+                    $activity = new ActivityUsers(
+                        $commentsUser->id_usuario,
+                        'crear_comentario',
+                        date('Y-m-d'),
+                        $commentsUser->id
+                    );
+                    
+                    $createActivityUser = new CreateActivityUser();
+                    $createActivityUser->execute($activity);
                     
                     // Devolver respuesta exitosa con el ID generado
                     http_response_code(201);

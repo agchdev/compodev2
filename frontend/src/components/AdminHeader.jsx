@@ -31,7 +31,7 @@ const AdminHeader = () => {
         // Aquí se harían llamadas a la API para obtener estadísticas
         // Por ahora, usamos datos de ejemplo
         const statsResponse = await axios.get(
-          `${backendUrl}/admin/AdminController.php?action=getStats`,
+          `${backendUrl}/admin_panel/AdminController.php?action=userStats`,
           { withCredentials: true }
         );
         

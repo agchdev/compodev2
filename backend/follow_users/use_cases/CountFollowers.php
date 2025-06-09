@@ -7,8 +7,8 @@ class CountFollowers {
         $db = new DB();
         $conn = $db->getConn();
         
-        // Contar el número de seguidores de un usuario
-        $stmt = $conn->prepare("SELECT COUNT(*) as total FROM seguidores_usuarios WHERE id_proyecto = ?");
+        // Contar el número de seguidores de un usuario (usuarios que le siguen a él)
+        $stmt = $conn->prepare("SELECT COUNT(*) as total FROM seguidres_usuarios WHERE id_usu2 = ?");
         if (!$stmt) {
             http_response_code(500);
             echo json_encode(["error" => "Error al preparar la consulta"]);

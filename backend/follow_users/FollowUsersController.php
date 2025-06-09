@@ -40,16 +40,16 @@ switch ($action) {
         $data = json_decode(file_get_contents('php://input'), true);
         
         // Verificar que se hayan proporcionado los IDs necesarios
-        if (!isset($data['userId']) || !isset($data['followId'])) {
+        if (!isset($data['id_usu1']) || !isset($data['id_usu2'])) {
             http_response_code(400);
-            echo json_encode(['error' => 'Faltan parámetros requeridos (userId y followId)']);
+            echo json_encode(['error' => 'Faltan parámetros requeridos (id_usu1 y id_usu2)']);
             exit;
         }
         
         try {
             // Crear instancia de caso de uso y ejecutar
             $useCase = new FollowUser();
-            $result = $useCase->execute($data['userId'], $data['followId']);
+            $result = $useCase->execute($data['id_usu1'], $data['id_usu2']);
             
             if ($result) {
                 echo json_encode([
@@ -77,17 +77,17 @@ switch ($action) {
         $data = json_decode(file_get_contents('php://input'), true);
         
         // Verificar que se hayan proporcionado los IDs necesarios
-        if (!isset($data['userId']) || !isset($data['followId'])) {
+        if (!isset($data['id_usu1']) || !isset($data['id_usu2'])) {
             http_response_code(400);
-            echo json_encode(['error' => 'Faltan parámetros requeridos (userId y followId)']);
+            echo json_encode(['error' => 'Faltan parámetros requeridos (id_usu1 y id_usu2)']);
             exit;
         }
         
         try {
             // Crear instancia de caso de uso y ejecutar
             $useCase = new UnfollowUser();
-            $result = $useCase->execute($data['userId'], $data['followId']);
-            
+            $result = $useCase->execute($data['id_usu1'], $data['id_usu2']);
+
             if ($result) {
                 echo json_encode([
                     'success' => true,
@@ -174,16 +174,26 @@ switch ($action) {
         $userId = intval($_GET['userId']);
         
         try {
-            // Crear una consulta SQL personalizada para contar cuántos usuarios sigue este usuario
-            $pdo = new PDO('mysql:host=localhost;dbname=compodev', 'root', '');
-            $stmt = $pdo->prepare('SELECT COUNT(*) as total FROM seguimiento WHERE usuario_id = ?');
-            $stmt->execute([$userId]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            $count = $result['total'] ?? 0;
+            // Crear una consulta SQL para contar cuántos usuarios sigue este usuario
+            require_once __DIR__ . '/../config/database.php';
+            $db = new DB();
+            $conn = $db->getConn();
+            
+            $stmt = $conn->prepare('SELECT COUNT(*) as total FROM seguidres_usuarios WHERE id_usu1 = ?');
+            if (!$stmt) {
+                throw new Exception('Error preparando la consulta');
+            }
+            
+            $stmt->bind_param('i', $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $count = isset($row['total']) ? intval($row['total']) : 0;
+            $stmt->close();
             
             echo json_encode([
                 'success' => true,
-                'count' => intval($count)
+                'count' => $count
             ]);
         } catch (Exception $e) {
             http_response_code(500);
