@@ -29,7 +29,7 @@ const Home = () => {
             </div>
           </div>
           <div className="hero-image">
-            <div className="abstract-shape">
+            <div className="abstract-shape overflow-hidden">
               <img src="/code-components.svg" alt="Componentes web" className="shape-overlay" />
               <div className="tech-icons">
                 <img src="/html.png" alt="HTML" className="tech-icon" />
