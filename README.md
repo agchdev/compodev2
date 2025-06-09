@@ -1,8 +1,6 @@
 # CompoDev - Plataforma Web de Desarrollo de Componentes
 
-<p align="center">
-  <img src="frontend/src/assets/logo-compodev.png" alt="CompoDev Logo" width="200">
-</p>
+  ![image](https://github.com/user-attachments/assets/57c7bcf8-da99-42bd-98c4-bd3d91f5896b)
 
 ## 📋 Descripción
 
