@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaRobot, FaTimes, FaPaperPlane, FaCheck } from 'react-icons/fa';
 import PropTypes from 'prop-types';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import '../styles/AICodeGenerator.css';
 
 /**
@@ -15,10 +16,8 @@ const AICodeGenerator = ({ onClose, onInsert }) => {
     const [loading, setLoading] = useState(false);
     const [output, setOutput] = useState(null);
 
-    // Esta función se usará cuando se integre con una API real de IA
-    // Comentada por ahora, se implementará cuando conectemos con la API real
-    /* 
-    const parseAIResponse = (responseText) => {
+    // Función para extraer el JSON de la respuesta de Gemini
+    const extractJsonFromGeminiResponse = (responseText) => {
         try {
             // Quitar los bloques ```json y ```
             const clean = responseText.replace(/```json|```/g, '').trim();
@@ -28,7 +27,6 @@ const AICodeGenerator = ({ onClose, onInsert }) => {
             return { error: 'No se pudo interpretar como JSON.', raw: responseText };
         }
     };
-    */
 
     // Función para manejar el envío del prompt
     const handleSend = async () => {
@@ -36,80 +34,36 @@ const AICodeGenerator = ({ onClose, onInsert }) => {
         
         setLoading(true);
         try {
-            // Aquí se implementaría la llamada real a la API de IA
-            // Por ahora, simulamos una respuesta con un temporizador
+            // Obtener la API key de las variables de entorno de Vite
+            const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+            const instrucciones = import.meta.env.VITE_INSTRUCCIONES;
             
-            // Simulación de llamada API (se reemplazaría con la API real)
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            if (!apiKey) {
+                throw new Error('API Key de Google no configurada');
+            }
             
-            // Simulamos una respuesta para demostración
-            const mockResponse = {
-                html: `<div class="container">
-  <h1>Mi Componente</h1>
-  <p>Componente creado según la descripción</p>
-  <button id="actionButton" class="action-button">Haz clic</button>
-</div>`,
-                css: `.container {
-  font-family: 'Roboto', sans-serif;
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 8px;
-  background: linear-gradient(145deg, #1a1a2e, #16213e);
-  color: #e0e0e0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-h1 {
-  color: #4cc9f0;
-  border-bottom: 2px solid #4361ee;
-  padding-bottom: 0.5rem;
-}
-
-.action-button {
-  background: linear-gradient(90deg, #4361ee, #4cc9f0);
-  border: none;
-  padding: 0.8rem 1.5rem;
-  color: white;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.action-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(76, 201, 240, 0.3);
-}`,
-                js: `// Código JS generado
-document.addEventListener('DOMContentLoaded', () => {
-  const button = document.getElementById('actionButton');
-  
-  if (button) {
-    button.addEventListener('click', () => {
-      alert('¡Botón creado con IA activado!');
-      
-      // Cambiar color al hacer clic
-      const container = document.querySelector('.container');
-      container.style.background = 'linear-gradient(145deg, #16213e, #1a1a2e)';
-      
-      // Añadir efecto visual
-      button.textContent = '¡Activado!';
-      button.style.background = 'linear-gradient(90deg, #4cc9f0, #4361ee)';
-    });
-  }
-});`
-            };
+            // Inicializar el cliente de Gemini
+            const genAI = new GoogleGenerativeAI(apiKey);
+            const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
             
-            // Ya no necesitamos parsear una respuesta JSON, usamos directamente el objeto
-            setOutput(mockResponse);
+            // Construir el prompt final con las instrucciones
+            const finalPrompt = `${instrucciones}${prompt}`;
             
-            // Si hay una función onInsert, la llamamos con el resultado
-            if (onInsert) onInsert(mockResponse);
+            // Realizar la llamada a la API
+            const result = await model.generateContent(finalPrompt);
+            const responseText = await result.response.text();
+            
+            // Extraer el JSON de la respuesta
+            const parsed = extractJsonFromGeminiResponse(responseText);
+            
+            setOutput(parsed);
+            
+            // Si hay una función onInsert y no hay error, la llamamos con el resultado
+            if (onInsert && !parsed.error) onInsert(parsed);
             
         } catch (err) {
-            console.error('Error al generar código:', err);
-            setOutput({ error: 'Error al generar el código. Inténtalo de nuevo.' });
+            console.error('Error con Gemini:', err);
+            setOutput({ error: 'Error al contactar con Gemini. Verifica tu API key.' });
         } finally {
             setLoading(false);
         }

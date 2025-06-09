@@ -38,6 +38,31 @@ const CodeProject = () => {
     }
     
     getSession()
+    
+    // Cargar datos del proyecto
+    const loadProjectData = async () => {
+      try {
+        const response = await axios.get(
+          `${backendUrl}/projects/ProjectController.php?action=getProjectCode&id=${idParam.id}`,
+          { withCredentials: true }
+        );
+        console.log("Datos del proyecto cargados:", response.data);
+        
+        // Actualizar los estados con los datos del proyecto
+        if (response.data) {
+          if (response.data.html) setHtmlCode(response.data.html);
+          if (response.data.css) setCssCode(response.data.css);
+          if (response.data.js) setJsCode(response.data.js);
+        }
+      } catch (error) {
+        console.log("Error al cargar los datos del proyecto:", error);
+      }
+    };
+    
+    // Si hay un ID de proyecto, cargar sus datos
+    if (idParam.id) {
+      loadProjectData();
+    }
   }, [backendUrl, idParam.id])
 
   useEffect(() => {
@@ -175,7 +200,7 @@ const handleInsertGeneratedCode = (generatedCode) => {
               />
             </div>
             
-            <div className="editor cyber-editor">
+            <div className="editor cyber-editor w-[907px]">
               <div className="editor-header">
                 <FaCss3Alt className="me-2" /> CSS
               </div>

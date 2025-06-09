@@ -17,6 +17,7 @@ require_once __DIR__ . '/use_cases/UpdateCodeProject.php';
 require_once __DIR__ . '/use_cases/CheckOwner.php';
 require_once __DIR__ . '/use_cases/UpdateProject.php';
 require_once __DIR__ . '/use_cases/DeleteProject.php';
+require_once __DIR__ . '/use_cases/GetProjectCode.php';
 
 // Obtener método HTTP
 $method = $_SERVER['REQUEST_METHOD'];
@@ -190,6 +191,22 @@ switch ($action) {
             }
             $useCase = new UpdateCodeProject();
             $useCase->execute($id, $data);
+        } else {
+            http_response_code(405);
+            echo json_encode(['error' => 'Método no permitido']);
+        }
+        break;
+        
+    case 'getProjectCode':
+        if ($method === 'GET') {
+            if (!isset($_GET['id'])) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Falta el ID del proyecto']);
+                exit;
+            }
+            $id = intval($_GET['id']);
+            $useCase = new GetProjectCode();
+            $useCase->execute($id);
         } else {
             http_response_code(405);
             echo json_encode(['error' => 'Método no permitido']);
