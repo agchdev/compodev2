@@ -1,8 +1,6 @@
 # CompoDev - Plataforma Web de Desarrollo de Componentes
 
-<p align="center">
   ![image](https://github.com/user-attachments/assets/57c7bcf8-da99-42bd-98c4-bd3d91f5896b)
-</p>
 
 ## 📋 Descripción
 
