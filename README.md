@@ -111,6 +111,7 @@ Distribuido bajo la Licencia MIT. Ver `LICENSE` para más información.
 
 ## 📞 Contacto
 
-Autor: [Tu Nombre] - [Tu Correo]
+Autor: AGCH - alejandroo.agch@gmail.com
+Instagram: @agch.obj
 
 Enlace del proyecto: [https://github.com/agchdev/compodev2](https://github.com/agchdev/compodev2)
